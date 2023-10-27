@@ -2,3 +2,5 @@
 env
 .vscode
 vscode
+
+SP500_data.csv
