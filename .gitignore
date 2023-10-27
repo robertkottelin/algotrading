@@ -1,6 +1,4 @@
 .env
-env
-.vscode
-vscode
-
-SP500_data.csv
+/env/
+/.vscode/
+*.csv
