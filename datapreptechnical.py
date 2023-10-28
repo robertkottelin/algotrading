@@ -32,9 +32,9 @@ for key, value in pivot_points.items():
 overall_high = df['High'].max()
 overall_low = df['Low'].min()
 
-fibonacci_retracements = calculate_fibonacci_retracements(overall_high, overall_low)
-for key, value in fibonacci_retracements.items():
-    df[key] = value  # This will create a new column for each Fibonacci level
+# fibonacci_retracements = calculate_fibonacci_retracements(overall_high, overall_low)
+# for key, value in fibonacci_retracements.items():
+#     df[key] = value  # This will create a new column for each Fibonacci level
 
 # drop rows with NaN
 df.dropna(inplace=True)
