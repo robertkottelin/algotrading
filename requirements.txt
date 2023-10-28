@@ -2,3 +2,4 @@ pandas
 yfinance
 fredapi
 python-dotenv
+fear-and-greed
