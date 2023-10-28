@@ -1,0 +1,4 @@
+pandas
+yfinance
+fredapi
+python-dotenv
