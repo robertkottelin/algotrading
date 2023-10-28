@@ -2,7 +2,7 @@ import pandas as pd
 from pafunctions import calculate_rsi, calculate_macd, calculate_vwap, calculate_momentum, calculate_bollinger_bands, calculate_fibonacci_retracements, calculate_pivot_points
 
 # Load your data
-df = pd.read_csv('macrodata.csv')
+df = pd.read_csv('data/macrodata.csv')
 df['Date'] = pd.to_datetime(df['Date'])  # Make sure the Date is in datetime format
 
 # Calculate RSI and MACD
@@ -40,3 +40,5 @@ for key, value in fibonacci_retracements.items():
 df.dropna(inplace=True)
 # Print the head of the dataframe to verify calculations
 print(df.head())
+
+df.to_csv('data/macrotechnicaldata.csv')

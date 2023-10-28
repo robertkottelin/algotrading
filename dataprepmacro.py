@@ -77,4 +77,4 @@ merged_df.dropna(inplace=True)
 print(merged_df.head())
 
 # Save the merged DataFrame to a CSV file
-merged_df.to_csv('macrodata.csv')
+merged_df.to_csv('data/macrodata.csv')
