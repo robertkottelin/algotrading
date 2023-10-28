@@ -25,7 +25,7 @@ data.reset_index(inplace=True)
 data.rename(columns={'index': 'Date'}, inplace=True)
 
 # Load the macroeconomic data (replace 'macrodata.csv' with your actual filename)
-macro_data = pd.read_csv('data/macrodata.csv')
+macro_data = pd.read_csv('data/macrotechnicaldata.csv')
 macro_data['Date'] = pd.to_datetime(macro_data['Date'])  # assuming date format here is recognized by pandas
 
 # Merge the two datasets on the 'Date' column
@@ -33,6 +33,9 @@ merged_data = pd.merge(data, macro_data, on='Date', how='inner')
 
 # Check the result
 print(merged_data.head())
+
+# drop Unnamed: 0
+merged_data.drop(columns=['Unnamed: 0'], inplace=True)
 
 # Save the merged dataset to a new CSV file
 merged_data.to_csv('data/macrotechnicalfearandgreed.csv', index=False)
