@@ -21,6 +21,7 @@ unemployment = fred.get_series('UNRATE', observation_start=start_date)
 cpi = fred.get_series('CPIAUCSL', observation_start=start_date)
 # Fetching the Federal Funds Rate
 interest_rate = fred.get_series('FEDFUNDS', observation_start=start_date)
+m2_money_supply = fred.get_series('M2NS', observation_start=start_date)  # 'M2NS' is the FRED code for seasonally adjusted M2
 
 # Standardizing data retrieval process and structure for economic indicators
 def prepare_economic_data(series, name):
@@ -34,6 +35,7 @@ gdp = prepare_economic_data(gdp, 'GDP')
 unemployment = prepare_economic_data(unemployment, 'Unemployment')
 cpi = prepare_economic_data(cpi, 'CPI')
 interest_rate = prepare_economic_data(interest_rate, 'Interest_Rate')  # Preparing interest rate data
+m2_money_supply = prepare_economic_data(m2_money_supply, 'M2_Money_Supply') 
 
 # Fetch S&P 500 and VIX data
 tickerSymbol = '^GSPC'
@@ -65,8 +67,7 @@ vix_data.drop(columns=['Volume_VIX', 'High_VIX', 'Low_VIX'], inplace=True)
 vix_data.rename(columns={'Close_VIX': 'VIX'}, inplace=True)
 
 # Combining all dataframes into a single dataframe
-merged_df = pd.concat([sp500_data, vix_data, gdp, unemployment, cpi, interest_rate], axis=1)
-
+merged_df = pd.concat([sp500_data, vix_data, gdp, unemployment, cpi, interest_rate, m2_money_supply], axis=1)
 # Fill missing values by propagating the last valid observation forward to next valid
 merged_df.fillna(method='ffill', inplace=True)
 
