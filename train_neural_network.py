@@ -138,7 +138,7 @@ history = model.fit(
     epochs=epochs, 
     batch_size=batch_size, 
     validation_data=(X_test, y_test), 
-    callbacks=[lr_scheduler]  # Using learning rate scheduler
+    callbacks=[lr_scheduler]
 )
 
 # Save model
