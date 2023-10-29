@@ -2,4 +2,7 @@
 /env/
 /.vscode/
 
-data/*/
+data/macrodata/
+data/macrotechnical/
+data/macrotechnicalfearandgreed/
+data/preppeddata/
