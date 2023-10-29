@@ -7,6 +7,8 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
 from tensorflow.keras.callbacks import ReduceLROnPlateau
 import matplotlib.pyplot as plt
+from tensorflow.keras.optimizers import Adam
+
 
 # Directory containing your CSV files
 data_dir = 'data/preppeddata/'
@@ -84,8 +86,11 @@ def build_very_large_model(input_dim):
     # Output layer
     model.add(Dense(1, activation='sigmoid'))  # for binary classification
 
+    custom_adam = Adam(learning_rate=0.01)
+
     # Compile the model
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='binary_crossentropy', optimizer=custom_adam, metrics=['accuracy'])
 
     return model
 
@@ -129,7 +134,7 @@ lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=0.7, patience=3, min
 
 # Set higher batch_size and epochs due to the availability of substantial computational resources
 batch_size = 512 # decrease? increase?
-epochs = 10 
+epochs = 100 
 
 # Build the model (using the more complex version here)
 model = build_very_large_model(X_train.shape[1])  # input_dim is the number of features
@@ -145,7 +150,7 @@ history = model.fit(
 )
 
 # Save model
-model.save("models/combined_model.h5")  # or another appropriate path
+model.save("models/100epochs_512batchsize.h5")  # or another appropriate path
 
 # Evaluate model
 loss, accuracy = model.evaluate(X_test, y_test)
