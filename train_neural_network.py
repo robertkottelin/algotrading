@@ -11,17 +11,7 @@ from tensorflow.keras.optimizers import Adam
 from joblib import dump
 
 # Directory containing your CSV files
-data_dir = 'data/preppeddata/'
-
-# Function to load and preprocess data
-def load_and_combine_data(data_directory):
-    combined_data = pd.DataFrame()
-    for filename in os.listdir(data_directory):
-        if filename.endswith('.csv'):
-            file_path = os.path.join(data_directory, filename)
-            df = pd.read_csv(file_path)
-            combined_data = pd.concat([combined_data, df], ignore_index=True)
-    return combined_data
+data_dir = 'data/preppedconcatdata/'
 
 # Define the neural network model
 def build_advanced_model(input_dim):
@@ -116,11 +106,11 @@ def plot_training_history(history):
     plt.show()
 
 # Load and combine data
-combined_data = load_and_combine_data(data_dir)
+df = pd.read_csv(data_dir)
 
 # Assuming the 'Next_Higher' column is your target
-X = combined_data.drop('Next_Higher', axis=1)
-y = combined_data['Next_Higher']
+X = df.drop('Next_Higher', axis=1)
+y = df['Next_Higher']
 
 # Standardize the features (important for neural network training)
 scaler = StandardScaler()
@@ -132,11 +122,11 @@ dump(scaler, scaler_filepath)
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.1, random_state=42)
 
 # Prepare a learning rate scheduler
-lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=0.7, patience=3, min_lr=1e-4)
+lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=0.7, patience=10, min_lr=1e-4)
 
 # Set higher batch_size and epochs due to the availability of substantial computational resources
-batch_size = 512 # decrease? increase?
-epochs = 100 
+batch_size = 32  #  try with 64, 128, 256, 512, 1024
+epochs = 5 # try with 50, 100, 200
 
 # Build the model (using the more complex version here)
 model = build_very_large_model(X_train.shape[1])  # input_dim is the number of features
@@ -152,7 +142,7 @@ history = model.fit(
 )
 
 # Save model
-model.save("models/100epochs_512batchsize.h5")  # or another appropriate path
+model.save("models/5epochs_32batchsize.h5")  # or another appropriate path
 
 # Evaluate model
 loss, accuracy = model.evaluate(X_test, y_test)
