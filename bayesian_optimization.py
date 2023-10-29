@@ -10,12 +10,31 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.optimizers import Adam
 from joblib import dump
 import optuna
+import datetime
 
 # Directory containing your CSV files
 data_dir = 'data/preppedconcatdata/combined_data.csv'
 
 # Ensure the 'models' directory exists
 os.makedirs('models', exist_ok=True)
+
+def log_trial(trial):
+    # Set the filename and open the file
+    filename = 'optimization_log.txt'
+    
+    with open(filename, 'a') as log_file:
+        # Get the current timestamp and format it
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        # Construct the log message
+        log_message = f"{timestamp}, Trial: {trial.number}, "
+        log_message += f"Params: {trial.params}, "
+        log_message += f"Accuracy: {trial.value}\n"
+
+        # Write the log message to the file
+        log_file.write(log_message)
+
+    print(f"Trial logged to {filename}")
 
 def build_very_large_model(input_dim, lr):
     model = Sequential([
@@ -84,18 +103,18 @@ def plot_training_history(history):
 
 def objective(trial):
     # Hyperparameters to be tuned by Optuna
-    lr = trial.suggest_float("lr", 1e-5, 1e-1, log=True)
-    batch_size = trial.suggest_categorical('batch_size', [32, 64, 128, 256, 512, 1024])
-    epochs = trial.suggest_int('epochs', 5, 200)
+    lr = trial.suggest_float("lr", 1e-4, 1e-1, log=True)
+    batch_size = trial.suggest_categorical('batch_size', [32, 128, 512, 1024])
+    epochs = trial.suggest_int('epochs', 10, 200)
 
     # Architecture hyperparameters
-    num_layers = trial.suggest_int("num_layers", 3, 10)
+    num_layers = trial.suggest_int("num_layers", 3, 6)
     dropout_rate = trial.suggest_float("dropout_rate", 0.1, 0.5)
     
     # ReduceLROnPlateau parameters
-    reduction_factor = trial.suggest_float("reduction_factor", 0.1, 0.9)
-    patience = trial.suggest_int("patience", 1, 20)
-    min_lr = trial.suggest_float("min_lr", 1e-6, 1e-2, log=True)
+    reduction_factor = trial.suggest_float("reduction_factor", 0.2, 0.9)
+    patience = trial.suggest_int("patience", 1, 10)
+    min_lr = trial.suggest_float("min_lr", 1e-5, 1e-2, log=True)
 
     # Model building
     model = Sequential()
@@ -132,6 +151,9 @@ def objective(trial):
 
     # Evaluate the model
     _, accuracy = model.evaluate(X_test_scaled, y_test, verbose=0)
+
+    log_trial(trial)
+
     return accuracy
 
 
@@ -158,6 +180,9 @@ study.optimize(objective, n_trials=50)
 best_trial = study.best_trial
 print(f"Best Accuracy: {best_trial.value}")
 print("Best hyperparameters: ", best_trial.params)
+
+# Log the best trial
+log_trial(best_trial)
 
 # Retrieve the best hyperparameters
 best_lr = best_trial.params["lr"]
