@@ -8,7 +8,7 @@ from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
 from tensorflow.keras.callbacks import ReduceLROnPlateau
 import matplotlib.pyplot as plt
 from tensorflow.keras.optimizers import Adam
-
+from joblib import dump
 
 # Directory containing your CSV files
 data_dir = 'data/preppeddata/'
@@ -125,6 +125,8 @@ y = combined_data['Next_Higher']
 # Standardize the features (important for neural network training)
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
+scaler_filepath = "models/scaler.save"
+dump(scaler, scaler_filepath) 
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.1, random_state=42)
