@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
+from joblib import load
 
 def load_and_preprocess_data(file_path, scaler):
     # Load the data from the CSV file
@@ -20,16 +21,15 @@ def load_and_preprocess_data(file_path, scaler):
 def main():
     data_dir = 'data/macrotechnicalfearandgreed/'
     models_dir = 'models/'
-    model_name = 'combined_model.h5' 
+    model_name = 'combined_model.h5'
+    scaler_filename = 'scaler.save'  # The filename you used to save your scaler
 
     # Load the model
     model_path = os.path.join(models_dir, model_name)
     model = tf.keras.models.load_model(model_path)
 
-    # Prepare the data scaler - assuming you have the same scaler used during training
-    # Ideally, you want to save your scaler to a file after training and load it here.
-    # For demonstration, we are initializing a new one, but in practice, this should be the same scaler you used during training.
-    scaler = StandardScaler()
+    # Load the pre-fitted scaler
+    scaler = joblib.load(scaler_filename)  # Now the scaler is ready to use for new data
 
     # Assume you have one or multiple CSV files in the directory
     for filename in os.listdir(data_dir):

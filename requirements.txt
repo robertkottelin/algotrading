@@ -6,3 +6,4 @@ fear-and-greed
 yahoo_fin
 tensorflow
 scikit-learn
+joblib
