@@ -7,3 +7,4 @@ yahoo_fin
 tensorflow
 scikit-learn
 joblib
+optuna
