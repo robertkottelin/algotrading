@@ -59,6 +59,27 @@ def prepare_market_data(df, suffix=''):
     df = df[['High', 'Low', 'Close', 'Volume']].rename(columns=columns_to_keep)
     return df
 
+def add_lagging_close_prices(df, n_days):
+    """
+    This function adds columns to the DataFrame for n_days of lagging close prices.
+
+    :param df: DataFrame containing market data, including a 'Close' column for S&P 500 prices.
+    :param n_days: The number of days of lagging prices to include.
+    :return: DataFrame with new columns for lagging close prices.
+    """
+    # Ensure that the data is sorted by date
+    df = df.sort_index()
+
+    # Generate columns for lagging close prices
+    for i in range(1, n_days + 1):
+        # The new column name
+        col_name = f'Close_Lag_{i}'
+        # Shift the data and save it in the new column
+        df[col_name] = df['Close'].shift(i)
+
+    return df
+
+
 # Prepare market data
 sp500_data = prepare_market_data(sp500_data)
 vix_data = prepare_market_data(vix_data, '_VIX') 
@@ -71,11 +92,32 @@ merged_df = pd.concat([sp500_data, vix_data, gdp, unemployment, cpi, interest_ra
 # Fill missing values by propagating the last valid observation forward to next valid
 merged_df.fillna(method='ffill', inplace=True)
 
+# Add 5 previous days' closing prices
+merged_df = add_lagging_close_prices(merged_df, 5)
+
+merged_df.fillna(method='ffill', inplace=True)
+
 # Drop NaN rows
 merged_df.dropna(inplace=True)
 
-# Display the merged DataFrame
+
+# Specify the new order of the columns explicitly
+new_order_columns = [
+    'High', 'Low', 'Close', 
+    'Close_Lag_1', 'Close_Lag_2', 'Close_Lag_3', 'Close_Lag_4', 'Close_Lag_5', 
+    'Volume', 'VIX', 
+    'GDP', 'Unemployment', 'CPI', 'Interest_Rate', 'M2_Money_Supply'
+    # Add any other columns here as per your DataFrame
+]
+
+# Ensure that all columns are present (especially important if some columns might have been optional or conditional)
+assert set(new_order_columns) == set(merged_df.columns), "Column sets do not match"
+
+# Reindex the DataFrame with the new column order
+merged_df = merged_df[new_order_columns]
+
+# Display the DataFrame with the new column order
 print(merged_df.head())
 
-# Save the merged DataFrame to a CSV file
+# Save the reordered DataFrame to a CSV file
 merged_df.to_csv('data/macrodata.csv')

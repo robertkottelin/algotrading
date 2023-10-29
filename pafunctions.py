@@ -1,4 +1,3 @@
-import pandas as pd
 
 # Function to calculate the Relative Strength Index (RSI)
 def calculate_rsi(data, window):
