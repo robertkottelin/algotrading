@@ -6,3 +6,5 @@ data/macrodata/
 data/macrotechnical/
 data/macrotechnicalfearandgreed/
 data/preppeddata/
+
+models/*
