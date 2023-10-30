@@ -17,24 +17,11 @@ data_dir = 'data/preppedconcatdata/combined_data.csv'
 
 # Ensure the 'models' directory exists
 os.makedirs('models', exist_ok=True)
-
-def log_trial(trial):
-    # Set the filename and open the file
-    filename = 'optimization_log.txt'
-    
-    with open(filename, 'a') as log_file:
-        # Get the current timestamp and format it
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
-        # Construct the log message
-        log_message = f"{timestamp}, Trial: {trial.number}, "
-        log_message += f"Params: {trial.params}, "
-        log_message += f"Accuracy: {trial.value}\n"
-
-        # Write the log message to the file
+LOG_FILE = "optuna_trials.log"
+def log_trial(trial, trial_result):
+    with open(LOG_FILE, "a") as log_file:  # "a" means append mode, which won't overwrite existing content
+        log_message = f"Trial {trial.number} finished with value: {trial_result} and parameters: {trial.params}.\n"
         log_file.write(log_message)
-
-    print(f"Trial logged to {filename}")
 
 def build_very_large_model(input_dim, lr):
     model = Sequential([
@@ -103,22 +90,22 @@ def plot_training_history(history):
 
 def objective(trial):
     # Hyperparameters to be tuned by Optuna
-    lr = trial.suggest_float("lr", 1e-4, 1e-1, log=True)
-    batch_size = trial.suggest_categorical('batch_size', [32, 128, 512, 1024])
-    epochs = trial.suggest_int('epochs', 10, 200)
+    lr = trial.suggest_float("lr", 1e-4, 1e-2, log=True)
+    batch_size = trial.suggest_categorical('batch_size', [256, 512, 1024])
+    epochs = trial.suggest_int('epochs', 100, 200)
 
     # Architecture hyperparameters
-    num_layers = trial.suggest_int("num_layers", 3, 6)
-    dropout_rate = trial.suggest_float("dropout_rate", 0.1, 0.5)
+    num_layers = trial.suggest_int("num_layers", 4, 6)
+    dropout_rate = trial.suggest_float("dropout_rate", 0.1, 0.2)
     
     # ReduceLROnPlateau parameters
-    reduction_factor = trial.suggest_float("reduction_factor", 0.2, 0.9)
-    patience = trial.suggest_int("patience", 1, 10)
+    reduction_factor = trial.suggest_float("reduction_factor", 0.8, 0.95)
+    patience = trial.suggest_int("patience", 2, 4)
     min_lr = trial.suggest_float("min_lr", 1e-5, 1e-2, log=True)
 
     # Model building
     model = Sequential()
-    model.add(Dense(trial.suggest_int('units_layer_0', 64, 1024), input_dim=X_train_scaled.shape[1], activation=trial.suggest_categorical('activation_layer_0', ['relu', 'tanh', 'sigmoid'])))
+    model.add(Dense(trial.suggest_int('units_layer_0', 64, 1024), input_dim=X_train.shape[1], activation=trial.suggest_categorical('activation_layer_0', ['relu', 'tanh', 'sigmoid'])))
     model.add(Dropout(rate=dropout_rate))
 
     # Adding variable layers based on the trial suggestion
@@ -136,23 +123,23 @@ def objective(trial):
 
     # Callbacks
     lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=reduction_factor, patience=patience, min_lr=min_lr)
-    early_stopping = EarlyStopping(monitor='val_loss', patience=3)
+    early_stopping = EarlyStopping(monitor='val_loss', patience=4)
 
     # Training the model
     history = model.fit(
-        X_train_scaled, 
+        X_train, 
         y_train, 
         epochs=epochs, 
         batch_size=batch_size, 
-        validation_data=(X_test_scaled, y_test), 
+        validation_data=(X_test, y_test), 
         callbacks=[early_stopping, lr_scheduler],
         verbose=2
     )
 
     # Evaluate the model
-    _, accuracy = model.evaluate(X_test_scaled, y_test, verbose=0)
+    _, accuracy = model.evaluate(X_test, y_test, verbose=0)
 
-    log_trial(trial)
+    log_trial(trial, accuracy)
 
     return accuracy
 
@@ -164,13 +151,6 @@ y = df['Next_Higher']
 
 # Data splitting and scaling
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-# Save the scaler
-scaler_filepath = "models/scaler.save"
-dump(scaler, scaler_filepath)
 
 # Optuna study
 study = optuna.create_study(direction='maximize')
@@ -191,13 +171,13 @@ best_epochs = best_trial.params["epochs"]
 best_params = study.best_trial.params
 
 # Final model training
-final_model = build_very_large_model(X_train_scaled.shape[1], best_lr)
+final_model = build_very_large_model(X_train.shape[1], best_lr)
 final_history = final_model.fit(
-    X_train_scaled, 
+    X_train, 
     y_train, 
     epochs=best_epochs, 
     batch_size=best_batch_size, 
-    validation_data=(X_test_scaled, y_test), 
+    validation_data=(X_test, y_test), 
     callbacks=[
         EarlyStopping(monitor='val_loss', patience=3),
         ReduceLROnPlateau(monitor='val_loss', factor=best_params["reduction_factor"], patience=best_params["patience"], min_lr=best_params["min_lr"])
@@ -207,7 +187,7 @@ final_history = final_model.fit(
 
 # Save and evaluate the final model
 final_model.save("models/final_optimized_model.h5")
-final_loss, final_accuracy = final_model.evaluate(X_test_scaled, y_test)
+final_loss, final_accuracy = final_model.evaluate(X_test, y_test)
 print(f"Final Model - Test Loss: {final_loss} - Test Accuracy: {final_accuracy}")
 
 # Training history plot
