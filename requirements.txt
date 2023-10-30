@@ -8,4 +8,3 @@ tensorflow
 scikit-learn
 joblib
 optuna
-tensorflow-rocm
