@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 
-# Set the directories
-input_dir = 'data/macrotechnicalfearandgreed/'
+# Set the directories for NYSE and NASDAQ stocks
+directories_to_update = ['data/nysestocks', 'data/nasdaqstocks']
 output_dir = 'data/preppeddata/'
 
 # Create the output directory if it doesn't exist
@@ -13,7 +13,7 @@ def process_file(file_path):
     # Load the dataframe
     df = pd.read_csv(file_path)
 
-    # Drop the 'Date' column
+    # Drop the 'Date' column if present
     if 'Date' in df.columns:
         df = df.drop(['Date'], axis=1)
 
@@ -26,16 +26,21 @@ def process_file(file_path):
 
     return df
 
-# Process all CSV files in the input directory
-for filename in os.listdir(input_dir):
-    if filename.endswith('.csv'):
-        # Create the full file paths
-        input_file_path = os.path.join(input_dir, filename)
-        output_file_path = os.path.join(output_dir, filename)
+# Process all CSV files in the specified directories
+for directory in directories_to_update:
+    for filename in os.listdir(directory):
+        if filename.endswith('.csv'):
+            print(f"Processing {filename}...")
+            
+            # Full path for input and output files
+            input_file_path = os.path.join(directory, filename)
+            output_file_path = os.path.join(output_dir, filename)
 
-        # Process the file
-        new_df = process_file(input_file_path)
+            # Process the file
+            new_df = process_file(input_file_path)
 
-        # Save to new CSV file in the output directory
-        new_df.to_csv(output_file_path, index=False)
-        print(f"Processed {filename} and saved to {output_file_path}")
+            # Save the updated dataframe to the new location
+            new_df.to_csv(output_file_path, index=False)
+            print(f"Processed {filename} and saved to {output_file_path}")
+
+print("All files have been processed.")

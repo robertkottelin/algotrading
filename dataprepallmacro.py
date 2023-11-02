@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Define the starting point for all data
-start_date = '1990-01-01'
+start_date = '1980-01-01'
 
 # Get the FRED API key from environment variables
 fred_api_key = os.getenv('FRED_API_KEY')
@@ -38,7 +38,8 @@ cpi_df = prepare_economic_data(cpi, 'CPI')
 interest_rate_df = prepare_economic_data(interest_rate, 'Interest_Rate')
 m2_money_supply_df = prepare_economic_data(m2_money_supply, 'M2_Money_Supply')
 
-# Function to prepare market dataframes
+
+# Make sure the function can handle a DataFrame directly (not much change needed)
 def prepare_market_data(df, suffix=''):
     columns_to_keep = {
         'High': f"High{suffix}",
@@ -49,62 +50,46 @@ def prepare_market_data(df, suffix=''):
     df = df[['High', 'Low', 'Close', 'Volume']].rename(columns=columns_to_keep)
     return df
 
-# Fetching all S&P 500 tickers
-def fetch_all_tickers():
-    try:
-        return stock_info.tickers_sp500()
-    except Exception as e:
-        print(f"Error fetching tickers: {e}")
-        return []
+# New function to update existing CSV files with macroeconomic data
+def update_csv_with_macrodata(directory):
+    for root, _, files in os.walk(directory):
+        for file in files:
+            if file.endswith('.csv'):
+                print(f"Processing {file}")
+                try:
+                    file_path = os.path.join(root, file)
+                    stock_df = pd.read_csv(file_path, index_col='Date', parse_dates=True)
+                    stock_df = prepare_market_data(stock_df)
 
-# Download data and save to CSV
-def download_data_save_csv(tickers):
-    output_directory = 'data/macrodata'
+                    # Merge stock data with macroeconomic data
+                    full_df = pd.concat([
+                        stock_df, 
+                        gdp_df, 
+                        unemployment_df, 
+                        cpi_df, 
+                        interest_rate_df, 
+                        m2_money_supply_df
+                    ], axis=1)
 
-    if not os.path.exists(output_directory):
-        os.makedirs(output_directory)
+                    # Forward fill missing values, if any
+                    full_df.fillna(method='ffill', inplace=True)
 
-    for ticker in tickers:
-        print(f"Processing {ticker}")
-        try:
-            stock_data = yf.download(ticker)
+                    # Remove any rows that still have missing values after forward filling
+                    full_df.dropna(inplace=True)
 
-            if stock_data.empty:
-                print(f"No data available for {ticker}. Skipping...")
-                continue
+                    # Save to CSV
+                    full_df.to_csv(file_path)
+                    print(f"Data for {file} updated and saved.")
 
-            stock_df = prepare_market_data(stock_data)
+                except Exception as e:
+                    print(f"Error processing {file}: {e}")
 
-            # Merge stock data with macroeconomic data
-            full_df = pd.concat([
-                stock_df, 
-                gdp_df, 
-                unemployment_df, 
-                cpi_df, 
-                interest_rate_df, 
-                m2_money_supply_df
-            ], axis=1)
+# Directories containing stock data CSVs
+nyse_directory = 'data/nysestocks'
+nasdaq_directory = 'data/nasdaqstocks'
 
-            # Forward fill missing values, if any
-            full_df.fillna(method='ffill', inplace=True)
-
-            # Remove any rows that still have missing values after forward filling
-            full_df.dropna(inplace=True)
-
-            # Save to CSV
-            csv_path = os.path.join(output_directory, f"{ticker}_macrodata.csv")
-            full_df.to_csv(csv_path)
-            print(f"Data for {ticker} saved to {csv_path}")
-
-        except Exception as e:
-            print(f"Error processing {ticker}: {e}")
-
-# Main directory for data
-if not os.path.exists('data'):
-    os.makedirs('data')
-
-# Fetch tickers and process
-all_tickers = fetch_all_tickers()
-download_data_save_csv(all_tickers)
+# Update CSV files with macroeconomic data
+update_csv_with_macrodata(nyse_directory)
+update_csv_with_macrodata(nasdaq_directory)
 
 print("Script execution completed.")

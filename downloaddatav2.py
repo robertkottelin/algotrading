@@ -11,7 +11,7 @@ def download_ticker_data(ticker):
 
 if __name__ == "__main__":
     # Read the CSV file
-    df = pd.read_csv("data/Nyse_stocks.csv")
+    df = pd.read_csv("data/Nasdaq_stocks.csv")
 
     # Create the directory if it doesn't exist
     if not os.path.exists("data/nysestocks"):

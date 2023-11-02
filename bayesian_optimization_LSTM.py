@@ -78,7 +78,7 @@ def objective(trial):
     # Hyperparameters to be tuned by Optuna
     lr = trial.suggest_float("lr", 1e-4, 1e-2, log=True)
     batch_size = trial.suggest_categorical('batch_size', [256, 512, 1024])
-    epochs = trial.suggest_int('epochs', 100, 200)
+    epochs = trial.suggest_int('epochs', 1, 2)
 
     # Architecture hyperparameters
     num_layers = trial.suggest_int("num_layers", 1, 3) 
