@@ -6,13 +6,14 @@ from pafunctions import (
 )
 
 # Define directories
-nyse_directory = 'data/nysestocks'
-nasdaq_directory = 'data/nasdaqstocks'
+input_directory = 'data/macrodata'
+output_directory = 'data/macrotechnical'
+
+# Ensure output directory exists
+if not os.path.exists(output_directory):
+    os.makedirs(output_directory)
 
 def add_technical_indicators(df):
-    # Make sure 'Date' and other relevant columns are in the correct data type
-    df['Date'] = pd.to_datetime(df['Date'])
-
     # Calculations
     window = 14  # for RSI
     df['RSI'] = calculate_rsi(df, window)
@@ -33,47 +34,33 @@ def add_technical_indicators(df):
     for key, value in pivot_points.items():
         df[key] = value
 
-    # Drop the MACD column, only interested in the MACD_Signal column
-    # df.drop(columns=['MACD'], inplace=True)
-
     # Drop rows with NaN values that may have been introduced by technical indicator calculations
     df.dropna(inplace=True)
+
     return df
 
 def process_files_in_directory(directory):
     for filename in os.listdir(directory):
         if filename.endswith('.csv'):  # Check whether it's a CSV file
             file_path = os.path.join(directory, filename)
+            output_path = os.path.join(output_directory, filename)
             print(f"Attempting to process {filename}...")
             
             try:
                 df = pd.read_csv(file_path)
-
-                if 'Date' not in df.columns:
-                    print(f"File {filename} does not contain 'Date' column. Skipping...")
-                    continue
-
-                print(f"'Date' column entries in {filename}:")
-                print(df['Date'].head())
-
                 df['Date'] = pd.to_datetime(df['Date'])
                 df.set_index('Date', inplace=True)
 
-                # Debug line to confirm the index
-                print(f"Index after setting 'Date':\n{df.index}")
-
                 df = add_technical_indicators(df)
 
-                df.to_csv(file_path)
+                df.reset_index(inplace=True)
+                df.to_csv(output_path, index=False)
                 print(f"Processed and updated {filename} with technical indicators.")
 
             except Exception as e:
                 print(f"An error occurred while processing {filename}: {e}")
 
-
-
-# Process CSV files in both directories
-process_files_in_directory(nyse_directory)
-process_files_in_directory(nasdaq_directory)
+# Process CSV files in the input directory
+process_files_in_directory(input_directory)
 
 print("All files have been processed with technical indicators.")
