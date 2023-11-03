@@ -13,8 +13,8 @@ fear_greed_data['Date'] = pd.to_datetime(fear_greed_data['Date'])
 #         fear_greed_data[col] = fear_greed_data[col].str.rstrip('%').astype(float) / 100
 
 # Directories to update
-input_directory = 'data/macrotechnical'
-directory_to_save_to = 'data/macrotechnicalfearandgreed'
+input_directory = 'data/macrotechnical/'
+directory_to_save_to = 'data/macrotechnicalfearandgreed/'
 
 for filename in os.listdir(input_directory):
     if filename.endswith('.csv'):  # Only process CSV files

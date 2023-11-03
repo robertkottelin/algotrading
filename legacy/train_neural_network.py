@@ -13,33 +13,6 @@ from joblib import dump
 # Directory containing your CSV files
 data_dir = 'data/preppedconcatdata/'
 
-# Define the neural network model
-def build_advanced_model(input_dim):
-    model = Sequential()
-
-    # Input layer
-    model.add(Dense(128, input_dim=input_dim, activation='relu'))
-    model.add(BatchNormalization())  # Normalize the activations of the previous layer at each batch
-    model.add(Dropout(0.2))  # Randomly sets a fraction rate of input units to 0 at each update during training
-    # Hidden layer 1
-    model.add(Dense(256, activation='relu'))  # Larger layer
-    model.add(BatchNormalization())
-    model.add(Dropout(0.2))
-    # Hidden layer 2
-    model.add(Dense(128, activation='relu'))  # Intermediate layer
-    model.add(BatchNormalization())
-    model.add(Dropout(0.2))
-    # Hidden layer 3
-    model.add(Dense(64, activation='relu'))  # Smaller layer, potentially nearing output size
-    model.add(BatchNormalization())
-    model.add(Dropout(0.2))
-    # Output layer: Since we are doing binary classification, we use a single neuron with sigmoid activation.
-    model.add(Dense(1, activation='sigmoid'))  # binary classification
-    # Compile the model
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-    return model
-
 def build_very_large_model(input_dim):
     model = Sequential()
 
@@ -79,7 +52,6 @@ def build_very_large_model(input_dim):
     custom_adam = Adam(learning_rate=0.01)
 
     # Compile the model
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     model.compile(loss='binary_crossentropy', optimizer=custom_adam, metrics=['accuracy'])
 
     return model
@@ -119,17 +91,14 @@ scaler_filepath = "models/scaler.save"
 dump(scaler, scaler_filepath) 
 
 # Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.1, random_state=42)
-
-# Prepare a learning rate scheduler
-lr_scheduler = ReduceLROnPlateau(monitor='val_loss', factor=0.7, patience=10, min_lr=1e-4)
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.01, random_state=42)
 
 # Set higher batch_size and epochs due to the availability of substantial computational resources
-batch_size = 32  #  try with 64, 128, 256, 512, 1024
-epochs = 5 # try with 50, 100, 200
+batch_size = 256  #  try with 64, 128, 256, 512, 1024
+epochs = 200 # try with 50, 100, 200
 
 # Build the model (using the more complex version here)
-model = build_very_large_model(X_train.shape[1])  # input_dim is the number of features
+model = build_very_large_model(X_train.shape[1]) 
 
 # Train the model with our new parameters
 history = model.fit(
@@ -137,12 +106,11 @@ history = model.fit(
     y_train, 
     epochs=epochs, 
     batch_size=batch_size, 
-    validation_data=(X_test, y_test), 
-    callbacks=[lr_scheduler]
+    validation_data=(X_test, y_test)
 )
 
 # Save model
-model.save("models/5epochs_32batchsize.h5")  # or another appropriate path
+model.save("models/new.h5")  # or another appropriate path
 
 # Evaluate model
 loss, accuracy = model.evaluate(X_test, y_test)
