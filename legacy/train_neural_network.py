@@ -11,7 +11,7 @@ from tensorflow.keras.optimizers import Adam
 from joblib import dump
 
 # Directory containing your CSV files
-data_dir = 'data/preppedconcatdata/'
+data_dir = 'data/preppedconcatdata/combined_data.csv'
 
 def build_very_large_model(input_dim):
     model = Sequential()
@@ -80,6 +80,11 @@ def plot_training_history(history):
 # Load and combine data
 df = pd.read_csv(data_dir)
 
+# save the dataframe to a csv file
+# df.to_csv('data/preppedconcatdata/combined_data.csv', index=False)
+
+# print(df.head())
+
 # Assuming the 'Next_Higher' column is your target
 X = df.drop('Next_Higher', axis=1)
 y = df['Next_Higher']
@@ -95,7 +100,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.01,
 
 # Set higher batch_size and epochs due to the availability of substantial computational resources
 batch_size = 256  #  try with 64, 128, 256, 512, 1024
-epochs = 200 # try with 50, 100, 200
+epochs = 2 # try with 50, 100, 200
 
 # Build the model (using the more complex version here)
 model = build_very_large_model(X_train.shape[1]) 

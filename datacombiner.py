@@ -42,9 +42,14 @@ def load_and_combine_data(data_directory, scaler):
                 print(f"No data to scale in file {filename}.")
                 continue
 
-            # Normalize the data
-            X_scaled = scaler.fit_transform(X)
-
+            # Normalize the data, do a try, catch statement to handle any potential errors
+            try:
+                X_scaled = scaler.fit_transform(X)
+            except ValueError as e:
+                print(f"Error scaling data from file {filename}.")
+                print(e)
+                continue
+        
             # Merge the scaled data back with the target column
             df_scaled = pd.concat([pd.DataFrame(X_scaled, columns=X.columns), df['Next_Higher'].reset_index(drop=True)], axis=1)
             
