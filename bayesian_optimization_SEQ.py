@@ -1,3 +1,5 @@
+# !pip install optuna
+
 import os
 import pandas as pd
 import tensorflow as tf
@@ -17,7 +19,7 @@ data_dir = 'data/preppedconcatdata/combined_data.csv'
 
 # Ensure the 'models' directory exists
 os.makedirs('models', exist_ok=True)
-LOG_FILE = "optuna_trials.log"
+LOG_FILE = "optuna_trials_DNN.log"
 def log_trial(trial, trial_result):
     with open(LOG_FILE, "a") as log_file:  # "a" means append mode, which won't overwrite existing content
         log_message = f"Trial {trial.number} finished with value: {trial_result} and parameters: {trial.params}.\n"
@@ -92,7 +94,7 @@ def objective(trial):
     # Hyperparameters to be tuned by Optuna
     lr = trial.suggest_float("lr", 1e-4, 1e-2, log=True)
     batch_size = trial.suggest_categorical('batch_size', [256, 512, 1024])
-    epochs = trial.suggest_int('epochs', 100, 200)
+    epochs = trial.suggest_int('epochs', 10, 30)
 
     # Architecture hyperparameters
     num_layers = trial.suggest_int("num_layers", 4, 6)
@@ -133,7 +135,7 @@ def objective(trial):
         batch_size=batch_size, 
         validation_data=(X_test, y_test), 
         callbacks=[early_stopping, lr_scheduler],
-        verbose=2
+        verbose=1
     )
 
     # Evaluate the model
@@ -182,7 +184,7 @@ final_history = final_model.fit(
         EarlyStopping(monitor='val_loss', patience=3),
         ReduceLROnPlateau(monitor='val_loss', factor=best_params["reduction_factor"], patience=best_params["patience"], min_lr=best_params["min_lr"])
     ],
-    verbose=2
+    verbose=1
 )
 
 # Save and evaluate the final model

@@ -100,7 +100,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.01,
 
 # Set higher batch_size and epochs due to the availability of substantial computational resources
 batch_size = 256  #  try with 64, 128, 256, 512, 1024
-epochs = 2 # try with 50, 100, 200
+epochs = 200 # try with 50, 100, 200
 
 # Build the model (using the more complex version here)
 model = build_very_large_model(X_train.shape[1]) 
