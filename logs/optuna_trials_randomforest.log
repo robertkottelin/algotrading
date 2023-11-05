@@ -1,0 +1,4 @@
+Trial 0 finished with value: 0.5681836498938828 and parameters: {'n_estimators': 80, 'max_depth': 16, 'min_samples_split': 148, 'min_samples_leaf': 25, 'criterion': 'entropy'}.
+Trial 0 finished with value: 0.586563862844657 and parameters: {'n_estimators': 288, 'max_depth': 123, 'min_samples_split': 32, 'min_samples_leaf': 18, 'criterion': 'entropy'}.
+Trial 1 finished with value: 0.5847683779741916 and parameters: {'n_estimators': 113, 'max_depth': 94, 'min_samples_split': 49, 'min_samples_leaf': 44, 'criterion': 'gini'}.
+Trial 2 finished with value: 0.5849340461542595 and parameters: {'n_estimators': 132, 'max_depth': 43, 'min_samples_split': 152, 'min_samples_leaf': 42, 'criterion': 'entropy'}.
