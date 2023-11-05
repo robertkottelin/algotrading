@@ -8,19 +8,23 @@ from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
 from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 import matplotlib.pyplot as plt
 from tensorflow.keras.optimizers import Adam
-from joblib import dump
+from sklearn.preprocessing import StandardScaler
 import optuna
 import datetime
 
 # Directory containing your CSV files
-data_dir = '/content/drive/MyDrive/Algotrading/combined_data.csv'
+data_dir = '/content/drive/MyDrive/Algotrading/SNPMacroTechnicalFearNGreedPrepped.csv'
 # Ensure the 'models' directory exists
 os.makedirs('models', exist_ok=True)
-LOG_FILE = "optuna_trials_DNN.log"
+LOG_FILE = "/content/drive/MyDrive/Algotrading/optuna_trials_DNN_SNP.log"
+
 def log_trial(trial, trial_result):
-    with open(LOG_FILE, "a") as log_file:  # "a" means append mode, which won't overwrite existing content
-        log_message = f"Trial {trial.number} finished with value: {trial_result} and parameters: {trial.params}.\n"
-        log_file.write(log_message)
+    try:
+        with open(LOG_FILE, "a") as log_file:
+            log_message = f"Trial {trial.number} finished with value: {trial_result} and parameters: {trial.params}.\n"
+            log_file.write(log_message)
+    except Exception as e:
+        print(f"Error logging trial {trial.number}: {e}")
 
 def build_very_large_model(input_dim, lr):
     model = Sequential([
@@ -63,53 +67,57 @@ def build_very_large_model(input_dim, lr):
 
     return model
 
+
 def plot_training_history(history):
-    plt.figure(figsize=(12, 6))
+    try:
+        plt.figure(figsize=(12, 6))
 
-    # Accuracy plot
-    plt.subplot(1, 2, 1)
-    plt.plot(history.history['accuracy'])
-    plt.plot(history.history['val_accuracy'])
-    plt.title('Model Accuracy')
-    plt.ylabel('Accuracy')
-    plt.xlabel('Epoch')
-    plt.legend(['Train', 'Test'], loc='upper left')
+        # Accuracy plot
+        plt.subplot(1, 2, 1)
+        plt.plot(history.history['accuracy'])
+        plt.plot(history.history['val_accuracy'])
+        plt.title('Model Accuracy')
+        plt.ylabel('Accuracy')
+        plt.xlabel('Epoch')
+        plt.legend(['Train', 'Test'], loc='upper left')
 
-    # Loss plot
-    plt.subplot(1, 2, 2)
-    plt.plot(history.history['loss'])
-    plt.plot(history.history['val_loss'])
-    plt.title('Model Loss')
-    plt.ylabel('Loss')
-    plt.xlabel('Epoch')
-    plt.legend(['Train', 'Test'], loc='upper left')
+        # Loss plot
+        plt.subplot(1, 2, 2)
+        plt.plot(history.history['loss'])
+        plt.plot(history.history['val_loss'])
+        plt.title('Model Loss')
+        plt.ylabel('Loss')
+        plt.xlabel('Epoch')
+        plt.legend(['Train', 'Test'], loc='upper left')
 
-    plt.tight_layout()
-    plt.show()
+        plt.tight_layout()
+        plt.show()
+    except Exception as e:
+        print(f"Failed to plot training history: {e}")
 
 def objective(trial):
     # Hyperparameters to be tuned by Optuna
     lr = trial.suggest_float("lr", 1e-4, 1e-2, log=True)
-    batch_size = trial.suggest_categorical('batch_size', [64, 128, 256, 512, 1024])
-    epochs = trial.suggest_int('epochs', 100, 300)
+    batch_size = trial.suggest_categorical('batch_size', [32, 64, 128, 256, 512, 1024])
+    epochs = trial.suggest_int('epochs', 100, 400)
 
     # Architecture hyperparameters
-    num_layers = trial.suggest_int("num_layers", 4, 6)
-    dropout_rate = trial.suggest_float("dropout_rate", 0.1, 0.2)
+    num_layers = trial.suggest_int("num_layers", 4, 8, step=1)
+    dropout_rate = trial.suggest_float("dropout_rate", 0.01, 0.2)
 
     # ReduceLROnPlateau parameters
-    reduction_factor = trial.suggest_float("reduction_factor", 0.8, 0.95)
-    patience = trial.suggest_int("patience", 2, 2)
-    min_lr = trial.suggest_float("min_lr", 1e-5, 1e-2, log=True)
+    reduction_factor = trial.suggest_float("reduction_factor", 0.8, 0.99)
+    patience = trial.suggest_int("patience", 10, 20)
+    min_lr = trial.suggest_float("min_lr", 1e-6, 1e-2, log=True)
 
     # Model building
     model = Sequential()
-    model.add(Dense(trial.suggest_int('units_layer_0', 256, 1024), input_dim=X_train.shape[1], activation=trial.suggest_categorical('activation_layer_0', ['relu', 'tanh', 'sigmoid'])))
+    model.add(Dense(trial.suggest_int('units_layer_0', 256, 2048, step=256), input_dim=X_train.shape[1], activation=trial.suggest_categorical('activation_layer_0', ['relu', 'tanh', 'sigmoid'])))
     model.add(Dropout(rate=dropout_rate))
 
     # Adding variable layers based on the trial suggestion
     for i in range(1, num_layers):
-        model.add(Dense(trial.suggest_int(f'units_layer_{i}', 256, 1024), activation=trial.suggest_categorical(f'activation_layer_{i}', ['relu', 'tanh', 'sigmoid'])))
+        model.add(Dense(trial.suggest_int(f'units_layer_{i}', 256, 2048, step=256), activation=trial.suggest_categorical(f'activation_layer_{i}', ['relu', 'tanh', 'sigmoid'])))
         model.add(Dropout(rate=dropout_rate))
 
     model.add(Dense(1, activation='sigmoid'))
@@ -142,53 +150,78 @@ def objective(trial):
 
     return accuracy
 
-
 # Load and preprocess data
-df = pd.read_csv(data_dir)
-X = df.drop('Next_Higher', axis=1)
-y = df['Next_Higher']
+try:
+    df = pd.read_csv(data_dir)
+    X = df.drop(['Next_Higher', 'Date'], axis=1)
+    y = df['Next_Higher']
+    # Preprocessing steps (scaling, encoding, etc.)
+except Exception as e:
+    print(f"Failed to load or preprocess data: {e}")
+    exit(1)
 
 # Data splitting and scaling
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
+try:
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
+    # Initialize the StandardScaler
+    scaler = StandardScaler()
+    # Fit only on training data
+    scaler.fit(X_train)
+    # Apply the transformations to the data:
+    X_train = scaler.transform(X_train)
+    X_test = scaler.transform(X_test)
+except Exception as e:
+    print(f"Failed to split or scale data: {e}")
+    exit(1)
 
 # Optuna study
-study = optuna.create_study(direction='maximize')
-study.optimize(objective, n_trials=50)
+try:
+    study = optuna.create_study(direction='maximize')
+    study.optimize(objective, n_trials=10000)
+except Exception as e:
+    print(f"Optuna optimization failed: {e}")
+    exit(1)
+    
+import joblib
+try:
+    joblib.dump(scaler, 'models/scaler.gz')
+except Exception as e:
+    print(f"Failed to save the scaler: {e}")
 
-# Best trial results
-best_trial = study.best_trial
-print(f"Best Accuracy: {best_trial.value}")
-print("Best hyperparameters: ", best_trial.params)
-
-# Log the best trial
-log_trial(best_trial)
-
-# Retrieve the best hyperparameters
-best_lr = best_trial.params["lr"]
-best_batch_size = best_trial.params["batch_size"]
-best_epochs = best_trial.params["epochs"]
+# After the study, we extract the best parameters
 best_params = study.best_trial.params
+print(f"Best hyperparameters: {best_params}")
 
-# Final model training
-final_model = build_very_large_model(X_train.shape[1], best_lr)
-final_history = final_model.fit(
-    X_train,
-    y_train,
-    epochs=best_epochs,
-    batch_size=best_batch_size,
-    validation_data=(X_test, y_test),
-    callbacks=[
-        EarlyStopping(monitor='val_loss', patience=3),
-        ReduceLROnPlateau(monitor='val_loss', factor=best_params["reduction_factor"], patience=best_params["patience"], min_lr=best_params["min_lr"])
-    ],
-    verbose=1
-)
+# Training the final model with the best parameters from the study
+final_model = build_very_large_model(input_dim=X_train.shape[1], lr=best_params['lr'])
 
-# Save and evaluate the final model
-final_model.save("models/final_optimized_model.h5")
-final_loss, final_accuracy = final_model.evaluate(X_test, y_test)
-print(f"Final Model - Test Loss: {final_loss} - Test Accuracy: {final_accuracy}")
+try:
+    final_history = final_model.fit(
+        X_train, y_train,
+        epochs=best_params['epochs'],
+        batch_size=best_params['batch_size'],
+        validation_data=(X_test, y_test),
+        verbose=2
+    )
+except Exception as e:
+    print(f"Failed to train the final model: {e}")
 
-# Training history plot
-plot_training_history(final_history)
+try:
+    final_model.save('models/final_model.h5')
+    # Save scaler or any preprocessing objects if needed
+except Exception as e:
+    print(f"Failed to save the final model: {e}")
+
+# Evaluate the final model
+try:
+    final_loss, final_accuracy = final_model.evaluate(X_test, y_test, verbose=0)
+    print(f"Final Model - Test Loss: {final_loss} - Test Accuracy: {final_accuracy}")
+except Exception as e:
+    print(f"Failed to evaluate the final model: {e}")
+
+# Plot training history
+try:
+    plot_training_history(final_history)
+except Exception as e:
+    print(f"Failed to plot training history: {e}")
 

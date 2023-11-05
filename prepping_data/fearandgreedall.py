@@ -13,8 +13,19 @@ fear_greed_data['Date'] = pd.to_datetime(fear_greed_data['Date'])
 #         fear_greed_data[col] = fear_greed_data[col].str.rstrip('%').astype(float) / 100
 
 # Directories to update
-input_directory = 'data/macrotechnical/'
-directory_to_save_to = 'data/macrotechnicalfearandgreed/'
+input_directory = 'data/SNP/SNPMacroTechnical.csv'
+directory_to_save_to = 'data/SNP/'
+
+stock_data = pd.read_csv('data/SNP/SNPMacroTechnical.csv')
+stock_data['Date'] = pd.to_datetime(stock_data['Date'])
+
+# Merge the fear and greed index data with the stock data
+merged_data = pd.merge(stock_data, fear_greed_data, on='Date', how='left')
+
+# Save the updated data back to the new CSV file
+merged_data.to_csv('data/SNP/SNPMacroTechnicalFearNGreed.csv', index=False)
+
+print(f"{filename} updated with fear and greed index data.")
 
 for filename in os.listdir(input_directory):
     if filename.endswith('.csv'):  # Only process CSV files

@@ -8,11 +8,11 @@ import optuna
 import joblib
 
 # Directory containing your CSV files
-data_dir = os.path.join('data', 'preppedconcatdata', 'combined_data.csv')
+# data_dir = os.path.join('data', 'SNP', 'SNPMacroTechnicalFearNGreedPrepped.csv')
 
 # Ensure the 'models' directory exists
 os.makedirs('models', exist_ok=True)
-LOG_FILE = "logs/optuna_trials_randomforest.log"
+LOG_FILE = "logs/optuna_trials_randomforest_SNP.log"
 
 def log_trial(trial, trial_result):
     try:
@@ -24,10 +24,12 @@ def log_trial(trial, trial_result):
 
 # Load and preprocess data
 try:
-    df = pd.read_csv(data_dir)
+    df = pd.read_csv('data/SNP/SNPMacroTechnicalFearNGreedPrepped.csv')
+
     # smaller dataset for testing
     # df_sampled = df.sample(frac=0.1, random_state=42)
     X = df.drop('Next_Higher', axis=1)
+    X = X.drop('Date', axis=1)
     y = df['Next_Higher'].astype(int)
 
     encoder = LabelEncoder()
@@ -49,10 +51,10 @@ def objective(trial):
     try:
         print(f"Starting trial {trial.number}")
         # Hyperparameters to be tuned by Optuna
-        n_estimators = trial.suggest_int('n_estimators', 100, 500)
-        max_depth = trial.suggest_int('max_depth', 10, 200)         
+        n_estimators = trial.suggest_int('n_estimators', 100, 1000)
+        max_depth = trial.suggest_int('max_depth', 5, 100)         
         min_samples_split = trial.suggest_int('min_samples_split', 2, 200)
-        min_samples_leaf = trial.suggest_int('min_samples_leaf', 1, 50)
+        min_samples_leaf = trial.suggest_int('min_samples_leaf', 1, 100)
         criterion = trial.suggest_categorical('criterion', ['gini', 'entropy'])
 
         print(f"Trial {trial.number} parameters: "
@@ -96,7 +98,7 @@ def objective(trial):
 # Optuna study
 try:
     study = optuna.create_study(direction='maximize', pruner=optuna.pruners.MedianPruner())
-    study.optimize(objective, n_trials=50)
+    study.optimize(objective, n_trials=10000)
 except Exception as e:
     print(f"Optuna optimization failed: {e}")
     exit(1)

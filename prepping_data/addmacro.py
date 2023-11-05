@@ -28,25 +28,39 @@ stock_files = os.listdir('data/stocks')
 # Make sure the macrodata directory exists
 os.makedirs('data/macrodata', exist_ok=True)
 
-for file in stock_files:
-    stock_path = os.path.join('data/stocks', file)
-    
-    # Load stock data
-    stock_df = pd.read_csv(stock_path)
+stock_df = pd.read_csv('data/SNP.csv')
+# Remove the time and timezone part from the 'Date' column
+stock_df['Date'] = stock_df['Date'].str.replace(r' \d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}', '', regex=True)
+# Then convert the Date to datetime and format it to date only
+stock_df['Date'] = pd.to_datetime(stock_df['Date']).dt.date
+# Merge the data on the Date column
+merged_df = pd.merge(stock_df, macro_df, on='Date', how='left')
 
-    # Remove the time and timezone part from the 'Date' column
-    stock_df['Date'] = stock_df['Date'].str.replace(r' \d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}', '', regex=True)
-    # Then convert the Date to datetime and format it to date only
-    stock_df['Date'] = pd.to_datetime(stock_df['Date']).dt.date
+# Drop rows where the Date does not have macroeconomic data
+merged_df.dropna(subset=['GDP', 'Unemployment', 'CPI', 'Interest_Rate', 'M2_Money_Supply'], inplace=True)
+
+merged_df.to_csv('data/SNPMacro.csv', index=False)
+
+
+# for file in stock_files:
+#     stock_path = os.path.join('data/stocks', file)
     
-    # Merge the data on the Date column
-    merged_df = pd.merge(stock_df, macro_df, on='Date', how='left')
+#     # Load stock data
+#     stock_df = pd.read_csv(stock_path)
+
+#     # Remove the time and timezone part from the 'Date' column
+#     stock_df['Date'] = stock_df['Date'].str.replace(r' \d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}', '', regex=True)
+#     # Then convert the Date to datetime and format it to date only
+#     stock_df['Date'] = pd.to_datetime(stock_df['Date']).dt.date
     
-    # Drop rows where the Date does not have macroeconomic data
-    merged_df.dropna(subset=['GDP', 'Unemployment', 'CPI', 'Interest_Rate', 'M2_Money_Supply'], inplace=True)
+#     # Merge the data on the Date column
+#     merged_df = pd.merge(stock_df, macro_df, on='Date', how='left')
     
-    # Save the merged DataFrame
-    merged_path = os.path.join('data/macrodata', file)
-    merged_df.to_csv(merged_path, index=False)
+#     # Drop rows where the Date does not have macroeconomic data
+#     merged_df.dropna(subset=['GDP', 'Unemployment', 'CPI', 'Interest_Rate', 'M2_Money_Supply'], inplace=True)
+    
+#     # Save the merged DataFrame
+#     merged_path = os.path.join('data/macrodata', file)
+#     merged_df.to_csv(merged_path, index=False)
     
 print("All files have been processed and saved in the data/macrodata directory.")

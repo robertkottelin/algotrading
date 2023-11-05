@@ -6,8 +6,8 @@ from pafunctions import (
 )
 
 # Define directories
-input_directory = 'data/macrodata'
-output_directory = 'data/macrotechnical'
+input_directory = 'data/SNP'
+output_directory = 'data/SNP'
 
 # Ensure output directory exists
 if not os.path.exists(output_directory):
@@ -54,7 +54,7 @@ def process_files_in_directory(directory):
                 df = add_technical_indicators(df)
 
                 df.reset_index(inplace=True)
-                df.to_csv(output_path, index=False)
+                df.to_csv('data/SNP/SNPMacroTechnical.csv', index=False)
                 print(f"Processed and updated {filename} with technical indicators.")
 
             except Exception as e:
