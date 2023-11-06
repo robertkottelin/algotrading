@@ -39,28 +39,38 @@ def add_technical_indicators(df):
 
     return df
 
-def process_files_in_directory(directory):
-    for filename in os.listdir(directory):
-        if filename.endswith('.csv'):  # Check whether it's a CSV file
-            file_path = os.path.join(directory, filename)
-            output_path = os.path.join(output_directory, filename)
-            print(f"Attempting to process {filename}...")
+# def process_files_in_directory(directory):
+#     for filename in os.listdir(directory):
+#         if filename.endswith('.csv'):  # Check whether it's a CSV file
+#             file_path = os.path.join(directory, filename)
+#             output_path = os.path.join(output_directory, filename)
+#             print(f"Attempting to process {filename}...")
             
-            try:
-                df = pd.read_csv(file_path)
-                df['Date'] = pd.to_datetime(df['Date'])
-                df.set_index('Date', inplace=True)
+#             try:
+#                 df = pd.read_csv(file_path)
+#                 df['Date'] = pd.to_datetime(df['Date'])
+#                 df.set_index('Date', inplace=True)
 
-                df = add_technical_indicators(df)
+#                 df = add_technical_indicators(df)
 
-                df.reset_index(inplace=True)
-                df.to_csv('data/SNP/SNPMacroTechnical.csv', index=False)
-                print(f"Processed and updated {filename} with technical indicators.")
+#                 df.reset_index(inplace=True)
+#                 df.to_csv('data/SNP/SNPMacroTechnical.csv', index=False)
+#                 print(f"Processed and updated {filename} with technical indicators.")
 
-            except Exception as e:
-                print(f"An error occurred while processing {filename}: {e}")
+#             except Exception as e:
+#                 print(f"An error occurred while processing {filename}: {e}")
 
-# Process CSV files in the input directory
-process_files_in_directory(input_directory)
+# # Process CSV files in the input directory
+# process_files_in_directory(input_directory)
+
+df = pd.read_csv('data/SNP/SNPMacro.csv')
+df['Date'] = pd.to_datetime(df['Date'])
+df.set_index('Date', inplace=True)
+
+df = add_technical_indicators(df)
+
+df.reset_index(inplace=True)
+df.to_csv('data/SNP/SNPMacroTechnical.csv', index=False)
+print(f"Processed and updated with technical indicators.")
 
 print("All files have been processed with technical indicators.")

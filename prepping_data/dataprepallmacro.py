@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from fredapi import Fred
 from dotenv import load_dotenv
+import datetime
 
 # Load .env environment variables
 load_dotenv()
@@ -38,8 +39,14 @@ m2_money_supply_df = prepare_economic_data(fred, 'M2NS', start_date, 'M2_Money_S
 all_data_df = pd.concat([gdp_df, unemployment_df, cpi_df, interest_rate_df, m2_money_supply_df], axis=1)
 all_data_df.fillna(method='ffill', inplace=True)
 
+# Ensure the DataFrame covers all dates up to today
+all_dates = pd.date_range(start=all_data_df.index.min(), end=datetime.datetime.today(), freq='D')
+all_data_df = all_data_df.reindex(all_dates).fillna(method='ffill')
+
 # Now, export the merged DataFrame to a CSV file
 all_data_df.to_csv('data/macrodata.csv')
+
+print(all_data_df)
 
 
 print("Script execution completed.")

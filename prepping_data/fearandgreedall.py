@@ -25,30 +25,30 @@ merged_data = pd.merge(stock_data, fear_greed_data, on='Date', how='left')
 # Save the updated data back to the new CSV file
 merged_data.to_csv('data/SNP/SNPMacroTechnicalFearNGreed.csv', index=False)
 
-print(f"{filename} updated with fear and greed index data.")
+# print(f"{filename} updated with fear and greed index data.")
 
-for filename in os.listdir(input_directory):
-    if filename.endswith('.csv'):  # Only process CSV files
-        print(f"Processing {filename}...")
-        file_path = os.path.join(input_directory, filename)
+# for filename in os.listdir(input_directory):
+#     if filename.endswith('.csv'):  # Only process CSV files
+#         print(f"Processing {filename}...")
+#         file_path = os.path.join(input_directory, filename)
 
-        try:
-            # Load the stock data
-            stock_data = pd.read_csv(file_path)
-            stock_data['Date'] = pd.to_datetime(stock_data['Date'])
+#         try:
+#             # Load the stock data
+#             stock_data = pd.read_csv(file_path)
+#             stock_data['Date'] = pd.to_datetime(stock_data['Date'])
 
-            # Merge the fear and greed index data with the stock data
-            merged_data = pd.merge(stock_data, fear_greed_data, on='Date', how='left')
+#             # Merge the fear and greed index data with the stock data
+#             merged_data = pd.merge(stock_data, fear_greed_data, on='Date', how='left')
 
-            # Define the path to save the updated file
-            save_path = os.path.join(directory_to_save_to, filename)
+#             # Define the path to save the updated file
+#             save_path = os.path.join(directory_to_save_to, filename)
 
-            # Save the updated data back to the new CSV file
-            merged_data.to_csv(save_path, index=False)
-            print(f"{filename} updated with fear and greed index data.")
+#             # Save the updated data back to the new CSV file
+#             merged_data.to_csv(save_path, index=False)
+#             print(f"{filename} updated with fear and greed index data.")
 
-        except Exception as e:
-            print(f"Error processing {filename}: {e}")
+#         except Exception as e:
+#             print(f"Error processing {filename}: {e}")
 
 print("Script execution completed.")
 

@@ -1,0 +1,34 @@
+Trial 0 finished with value: 0.6304348111152649 and parameters: {'n_layers': 3, 'dropout': 0.02411064368638388, 'n_units_l0': 197, 'n_units_l1': 86, 'n_units_l2': 111}.
+Trial 1 finished with value: 0.6304348111152649 and parameters: {'n_layers': 1, 'dropout': 0.06038900788126933, 'n_units_l0': 189}.
+Trial 2 finished with value: 0.6304348111152649 and parameters: {'n_layers': 1, 'dropout': 0.345675031992798, 'n_units_l0': 119}.
+Trial 3 finished with value: 0.6304348111152649 and parameters: {'n_layers': 3, 'dropout': 0.15910402777171734, 'n_units_l0': 76, 'n_units_l1': 180, 'n_units_l2': 143}.
+Trial 4 finished with value: 0.6304348111152649 and parameters: {'n_layers': 2, 'dropout': 0.24234918208015882, 'n_units_l0': 200, 'n_units_l1': 195}.
+Trial 5 finished with value: 0.6304348111152649 and parameters: {'n_layers': 3, 'dropout': 0.2421359359542659, 'n_units_l0': 187, 'n_units_l1': 157, 'n_units_l2': 143}.
+Trial 6 finished with value: 0.6304348111152649 and parameters: {'n_layers': 3, 'dropout': 0.1875669173895927, 'n_units_l0': 153, 'n_units_l1': 91, 'n_units_l2': 111}.
+Trial 7 finished with value: 0.3695652186870575 and parameters: {'n_layers': 1, 'dropout': 0.15954415578690823, 'n_units_l0': 176}.
+Trial 8 finished with value: 0.6304348111152649 and parameters: {'n_layers': 2, 'dropout': 0.4566829496351875, 'n_units_l0': 161, 'n_units_l1': 168}.
+Trial 9 finished with value: 0.6304348111152649 and parameters: {'n_layers': 3, 'dropout': 0.14337201993841403, 'n_units_l0': 182, 'n_units_l1': 115, 'n_units_l2': 61}.
+Trial 10 finished with value: 0.6304348111152649 and parameters: {'n_layers': 2, 'dropout': 0.0029726811471176354, 'n_units_l0': 117, 'n_units_l1': 57}.
+Trial 11 finished with value: 0.6304348111152649 and parameters: {'n_layers': 1, 'dropout': 0.011874075197701575, 'n_units_l0': 143}.
+Trial 12 finished with value: 0.6304348111152649 and parameters: {'n_layers': 1, 'dropout': 0.06959046884818426, 'n_units_l0': 51}.
+Trial 13 finished with value: 0.6304348111152649 and parameters: {'n_layers': 2, 'dropout': 0.0790675672135897, 'n_units_l0': 198, 'n_units_l1': 51}.
+Trial 14 finished with value: 0.6304348111152649 and parameters: {'n_layers': 2, 'dropout': 0.08069153554556648, 'n_units_l0': 136, 'n_units_l1': 92}.
+Trial 15 finished with value: 0.6304348111152649 and parameters: {'n_layers': 1, 'dropout': 0.007843497228802135, 'n_units_l0': 166}.
+Trial 16 finished with value: 0.6304348111152649 and parameters: {'n_layers': 3, 'dropout': 0.08919225725270674, 'n_units_l0': 99, 'n_units_l1': 125, 'n_units_l2': 198}.
+Trial 17 finished with value: 0.6304348111152649 and parameters: {'n_layers': 2, 'dropout': 0.10977311984469346, 'n_units_l0': 174, 'n_units_l1': 82}.
+Trial 18 finished with value: 0.6304348111152649 and parameters: {'n_layers': 1, 'dropout': 0.04923111471919507, 'n_units_l0': 151}.
+Trial 19 finished with value: 0.6304348111152649 and parameters: {'n_layers': 3, 'dropout': 0.04100770929328189, 'n_units_l0': 97, 'n_units_l1': 144, 'n_units_l2': 86}.
+Trial 20 finished with value: 0.6304348111152649 and parameters: {'n_layers': 2, 'dropout': 0.1268766913329189, 'n_units_l0': 191, 'n_units_l1': 108}.
+Trial 0 finished with value: 0.6304348111152649 and parameters: {'n_layers': 6, 'dropout': 0.2730144277235759, 'n_units_l0': 146, 'n_units_l1': 128, 'n_units_l2': 88, 'n_units_l3': 154, 'n_units_l4': 108, 'n_units_l5': 176}.
+Trial 1 finished with value: 0.6304348111152649 and parameters: {'n_layers': 3, 'dropout': 0.29587100457732934, 'n_units_l0': 105, 'n_units_l1': 167, 'n_units_l2': 135}.
+Trial 2 finished with value: 0.6304348111152649 and parameters: {'n_layers': 5, 'dropout': 0.18899392967598835, 'n_units_l0': 181, 'n_units_l1': 119, 'n_units_l2': 104, 'n_units_l3': 77, 'n_units_l4': 133}.
+Trial 3 finished with value: 0.6304348111152649 and parameters: {'n_layers': 3, 'dropout': 0.3893191213717384, 'n_units_l0': 181, 'n_units_l1': 119, 'n_units_l2': 171}.
+Trial 4 finished with value: 0.6304348111152649 and parameters: {'n_layers': 4, 'dropout': 0.1776032922159285, 'n_units_l0': 128, 'n_units_l1': 186, 'n_units_l2': 57, 'n_units_l3': 85}.
+Trial 5 finished with value: 0.6304348111152649 and parameters: {'n_layers': 6, 'dropout': 0.23140784127065742, 'n_units_l0': 195, 'n_units_l1': 134, 'n_units_l2': 116, 'n_units_l3': 57, 'n_units_l4': 102, 'n_units_l5': 153}.
+Trial 6 finished with value: 0.6304348111152649 and parameters: {'n_layers': 3, 'dropout': 0.28151253751414557, 'n_units_l0': 96, 'n_units_l1': 194, 'n_units_l2': 72}.
+Trial 7 finished with value: 0.6304348111152649 and parameters: {'n_layers': 4, 'dropout': 0.08948914986955728, 'n_units_l0': 165, 'n_units_l1': 86, 'n_units_l2': 187, 'n_units_l3': 150}.
+Trial 8 finished with value: 0.6304348111152649 and parameters: {'n_layers': 3, 'dropout': 0.11608602509446114, 'n_units_l0': 196, 'n_units_l1': 182, 'n_units_l2': 105}.
+Trial 9 finished with value: 0.6304348111152649 and parameters: {'n_layers': 3, 'dropout': 0.0034602003582260735, 'n_units_l0': 161, 'n_units_l1': 105, 'n_units_l2': 124}.
+Trial 10 finished with value: 0.6304348111152649 and parameters: {'n_layers': 6, 'dropout': 0.39449062884906044, 'n_units_l0': 55, 'n_units_l1': 62, 'n_units_l2': 78, 'n_units_l3': 197, 'n_units_l4': 58, 'n_units_l5': 194}.
+Trial 11 finished with value: 0.6304348111152649 and parameters: {'n_layers': 5, 'dropout': 0.304740085241475, 'n_units_l0': 118, 'n_units_l1': 157, 'n_units_l2': 142, 'n_units_l3': 149, 'n_units_l4': 198}.
+Trial 12 finished with value: 0.6304348111152649 and parameters: {'n_layers': 5, 'dropout': 0.3126480561777698, 'n_units_l0': 131, 'n_units_l1': 154, 'n_units_l2': 147, 'n_units_l3': 198, 'n_units_l4': 129}.

@@ -24,7 +24,7 @@ def log_trial(trial, trial_result):
 
 # Load and preprocess data
 try:
-    df = pd.read_csv('data/SNP/SNPMacroTechnicalFearNGreedPrepped.csv')
+    df = pd.read_csv('data/SNP/SNPFinal.csv')
 
     # smaller dataset for testing
     # df_sampled = df.sample(frac=0.1, random_state=42)
@@ -51,10 +51,10 @@ def objective(trial):
     try:
         print(f"Starting trial {trial.number}")
         # Hyperparameters to be tuned by Optuna
-        n_estimators = trial.suggest_int('n_estimators', 100, 1000)
-        max_depth = trial.suggest_int('max_depth', 5, 100)         
-        min_samples_split = trial.suggest_int('min_samples_split', 2, 200)
-        min_samples_leaf = trial.suggest_int('min_samples_leaf', 1, 100)
+        n_estimators = trial.suggest_int('n_estimators', 200, 300)
+        max_depth = trial.suggest_int('max_depth', 10, 20)         
+        min_samples_split = trial.suggest_int('min_samples_split', 40, 60)
+        min_samples_leaf = trial.suggest_int('min_samples_leaf', 40, 60)
         criterion = trial.suggest_categorical('criterion', ['gini', 'entropy'])
 
         print(f"Trial {trial.number} parameters: "
@@ -98,7 +98,7 @@ def objective(trial):
 # Optuna study
 try:
     study = optuna.create_study(direction='maximize', pruner=optuna.pruners.MedianPruner())
-    study.optimize(objective, n_trials=10000)
+    study.optimize(objective, n_trials=1000)
 except Exception as e:
     print(f"Optuna optimization failed: {e}")
     exit(1)

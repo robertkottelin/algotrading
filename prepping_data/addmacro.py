@@ -7,12 +7,17 @@ def clean_date(date_str):
 
 # Load the macroeconomic data
 macro_df = pd.read_csv('data/macrodata.csv')
+macro_df.rename(columns={'Unnamed: 0': 'Date'}, inplace=True)
+macro_df['Date'] = pd.to_datetime(macro_df['Date']).dt.date
+print(macro_df.columns) 
 # Convert the Date to datetime and format it to date only
 macro_df['Date'] = pd.to_datetime(macro_df['Date']).dt.date
 
 # Find the start and end dates
 start_date = macro_df['Date'].min()
 end_date = macro_df['Date'].max()
+
+print(f"End date: {end_date}")
 
 # Create a date range that includes every day between the start and end dates
 date_range = pd.date_range(start=start_date, end=end_date, freq='D')
@@ -23,23 +28,27 @@ macro_df.rename(columns={'index': 'Date'}, inplace=True)
 macro_df['Date'] = macro_df['Date'].dt.date
 
 # Get the list of stock data files
-stock_files = os.listdir('data/stocks')
+# stock_files = os.listdir('data/SNP/stocks')
 
 # Make sure the macrodata directory exists
-os.makedirs('data/macrodata', exist_ok=True)
+# os.makedirs('data/macrodata', exist_ok=True)
 
-stock_df = pd.read_csv('data/SNP.csv')
+stock_df = pd.read_csv('data/SNP/SNP.csv')
+
 # Remove the time and timezone part from the 'Date' column
 stock_df['Date'] = stock_df['Date'].str.replace(r' \d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}', '', regex=True)
 # Then convert the Date to datetime and format it to date only
 stock_df['Date'] = pd.to_datetime(stock_df['Date']).dt.date
 # Merge the data on the Date column
+
 merged_df = pd.merge(stock_df, macro_df, on='Date', how='left')
+
+
 
 # Drop rows where the Date does not have macroeconomic data
 merged_df.dropna(subset=['GDP', 'Unemployment', 'CPI', 'Interest_Rate', 'M2_Money_Supply'], inplace=True)
 
-merged_df.to_csv('data/SNPMacro.csv', index=False)
+merged_df.to_csv('data/SNP/SNPMacro.csv', index=False)
 
 
 # for file in stock_files:
@@ -63,4 +72,4 @@ merged_df.to_csv('data/SNPMacro.csv', index=False)
 #     merged_path = os.path.join('data/macrodata', file)
 #     merged_df.to_csv(merged_path, index=False)
     
-print("All files have been processed and saved in the data/macrodata directory.")
+print("Completed.")

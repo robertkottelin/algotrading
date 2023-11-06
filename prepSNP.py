@@ -25,19 +25,19 @@ def process_file(file_path):
     df['Next_Higher'] = (df['Close'].shift(-1) > df['Close']).astype(int)
 
     # Add the last 5 days' close prices as new columns
-    for i in range(1, 10):
+    for i in range(1, 20):
         df[f'Close_{i}d_ago'] = df['Close'].shift(i)
 
     # drop rows with NaN values
     df.dropna(inplace=True)
 
-    df.drop(columns=['Open', 'Dividends', 'Stock Splits'], inplace=True)
+    # df.drop(columns=['Open', 'Dividends', 'Stock Splits'], inplace=True)
 
     return df
 
 def main():
     input_file_path = 'data/SNP/SNPMacroTechnicalFearNGreed.csv'
-    output_file_path = 'data/SNP/SNPMacroTechnicalFearNGreedPrepped.csv'
+    output_file_path = 'data/SNP/SNPFinal.csv'
 
     # Ensure the output directory exists
     os.makedirs(os.path.dirname(output_file_path), exist_ok=True)
