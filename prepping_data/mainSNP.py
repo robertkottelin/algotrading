@@ -8,12 +8,12 @@ def run_script(script_name):
 def main():
     # List of scripts to run in order
     scripts = [
-        'downloadSNP.py',
-        'dataprepallmacro.py',
-        'addmacro.py'
-        'dataprepalltechnical.py',
-        'fearandgreedall.py',
-        'prepSNP.py'
+        'prepping_data/downloadSNP.py',
+        'prepping_data/dataprepallmacro.py',
+        'prepping_data/addmacro.py',
+        'prepping_data/dataprepalltechnical.py',
+        'prepping_data/fearandgreedall.py',
+        'prepping_data/prepSNP.py'
     ]
 
     for script in scripts:
