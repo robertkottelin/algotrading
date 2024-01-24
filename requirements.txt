@@ -8,4 +8,8 @@ tensorflow
 scikit-learn
 joblib
 optuna
-tensorflow-rocm
+# tensorflow-rocm
+binance-connector
+python-binance
+requests
+coinglass-api
