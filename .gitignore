@@ -10,5 +10,6 @@ data/preppedconcatdata/
 data/*/
 data/*
 Stocks/data/*
+__pycache__/
 
 models/*
