@@ -1,0 +1,2 @@
+Final Best Parameters: (8, 15, 78, 15, 31, 6)
+Final Best Profit: 0.7701577671131442
