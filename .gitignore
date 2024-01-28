@@ -9,6 +9,8 @@ data/preppeddata/
 data/preppedconcatdata/
 data/*/
 data/*
+Crypto/data/*
+Crypto/data/*/
 Stocks/data/*
 Stocks/data/*/
 __pycache__/

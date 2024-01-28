@@ -14,11 +14,11 @@ headers = {
     "coinglassSecret": coinglass_api_key
 }
 
-urlOHLC = "https://open-api.coinglass.com/public/v2/indicator/price_ohlc?ex=Binance&pair=BTCUSDT&interval=h4&limit=4500"
-urlOI = "https://open-api.coinglass.com/public/v2/indicator/open_interest_ohlc?ex=Binance&pair=BTCUSDT&interval=h4&limit=4500"
-urlFunding = "https://open-api.coinglass.com/public/v2/indicator/funding_avg?symbol=BTC&interval=h4&limit=4500"
-urlLiquidation = "https://open-api.coinglass.com/public/v2/indicator/liquidation_pair?ex=Binance&pair=BTCUSDT&interval=h4&limit=4500"
-urlLongShort = "https://open-api.coinglass.com/public/v2/indicator/top_long_short_position_ratio?ex=Binance&pair=BTCUSDT&interval=h4&limit=4500"
+urlOHLC = "https://open-api.coinglass.com/public/v2/indicator/price_ohlc?ex=Binance&pair=SOLUSDT&interval=h4&limit=4500"
+urlOI = "https://open-api.coinglass.com/public/v2/indicator/open_interest_ohlc?ex=Binance&pair=SOLUSDT&interval=h4&limit=4500"
+urlFunding = "https://open-api.coinglass.com/public/v2/indicator/funding_avg?symbol=SOL&interval=h4&limit=4500"
+urlLiquidation = "https://open-api.coinglass.com/public/v2/indicator/liquidation_pair?ex=Binance&pair=SOLUSDT&interval=h4&limit=4500"
+urlLongShort = "https://open-api.coinglass.com/public/v2/indicator/top_long_short_position_ratio?ex=Binance&pair=SOLUSDT&interval=h4&limit=4500"
 urlPuell = "https://open-api.coinglass.com/public/v2/index/puell_multiple"
 urlPi = "https://open-api.coinglass.com/public/v2/index/pi"
 urlGoldenRatio = "https://open-api.coinglass.com/public/v2/index/golden_ratio_multiplier"
@@ -158,6 +158,6 @@ merged_df = pd.merge_asof(merged_df, golden_ratio_data, on='t', direction='neare
 merged_df = pd.merge_asof(merged_df, stock_flow_data, on='t', direction='nearest')
 
 # save dataframe
-merged_df.to_csv('Crypto/coinglass.csv', index=False)
+merged_df.to_csv('Crypto/data/coinglass_SOL.csv', index=False)
 
 print(merged_df.head())

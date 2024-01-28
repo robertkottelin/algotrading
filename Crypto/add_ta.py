@@ -28,8 +28,8 @@ def process_file(file_path, output_file_path):
     df = pd.read_csv(file_path)
 
     # Assuming 'c' is the 'Close' price for RSI and MACD calculation
-    df['RSI'] = compute_rsi(df['c'], 14)
-    df['MACD'], df['MACD_Signal'] = compute_macd(df['c'], 12, 26, 9)
+    df['RSI'] = compute_rsi(df['c'], 25) # Optimized, Lower threshold 17, higher 76
+    df['MACD'], df['MACD_Signal'] = compute_macd(df['c'], 15, 23, 6) # Optimized
     
     # Drop rows with NaN values
     df = df.dropna()
@@ -38,8 +38,8 @@ def process_file(file_path, output_file_path):
     df.to_csv(output_file_path, index=False)
 
 # File paths
-input_file_path = 'Crypto/coinglass.csv'  # Replace with your input file path
-output_file_path = 'Crypto/coinglass_ta.csv' # Replace with your desired output file path
+input_file_path = 'Crypto/data/coinglass_SOL.csv'  # Replace with your input file path
+output_file_path = 'Crypto/data/coinglass_SOL_ta.csv' # Replace with your desired output file path
 
 # Process the file
 process_file(input_file_path, output_file_path)

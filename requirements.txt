@@ -13,3 +13,4 @@ binance-connector
 python-binance
 requests
 coinglass-api
+statsmodels

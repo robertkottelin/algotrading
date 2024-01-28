@@ -64,7 +64,7 @@ def process_parameters(params):
 # Function to optimize parameters using multiprocessing
 def optimize_parameters(file_path):
     parameter_space = list(itertools.product(
-            range(8, 32, 1), range(15, 25, 1), range(75, 85, 1),
+            range(8, 28, 1), range(16, 24, 1), range(76, 84, 1),
             range(8, 16, 1), range(22, 32, 1), range(6, 18, 1)))
     
     total_iterations = len(parameter_space)
