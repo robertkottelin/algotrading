@@ -53,7 +53,7 @@ optimizer = tf.keras.optimizers.Adam(learning_rate=0.0015)  # Increase the learn
 model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
 # Train the model
-model.fit(X_train, y_train, epochs=80, batch_size=1, validation_split=0.1)
+model.fit(X_train, y_train, epochs=200, batch_size=1, validation_split=0.1)
 
 # Evaluate the model on the test set
 loss, accuracy = model.evaluate(X_test, y_test)
@@ -65,7 +65,7 @@ if not os.path.exists(model_dir):
     os.makedirs(model_dir)
 
 # Save the model
-model.save(f'{model_dir}/crypto_h4_model')
+model.save(f'{model_dir}/crypto_h4_model2')
 
 print("Model saved successfully!")
 

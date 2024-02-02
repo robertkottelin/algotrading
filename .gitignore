@@ -10,6 +10,10 @@ data/preppedconcatdata/
 data/*/
 data/*
 Crypto/data/*
+!Crypto/data/coinglass_BTC.csv
+!Crypto/data/coinglass_ETH.csv
+!Crypto/data/coinglass_SOL.csv
+
 Crypto/data/*/
 Stocks/data/*
 Stocks/data/*/
