@@ -30,10 +30,18 @@ def preprocess_and_scale(df):
 X_btc, y_btc = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_BTC_ta.csv'))
 X_eth, y_eth = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_ETH_ta.csv'))
 X_sol, y_sol = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_SOL_ta.csv'))
+X_xrp, y_xrp = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_XRP_ta.csv'))
+X_bnb, y_bnb = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_BNB_ta.csv'))
+X_dot, y_dot = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_DOT_ta.csv'))
+X_ada, y_ada = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_ADA_ta.csv'))
+X_avax, y_avax = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_AVAX_ta.csv'))
+X_matic, y_matic = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_MATIC_ta.csv'))
+X_etc, y_etc = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_ETC_ta.csv'))
+X_link, y_link = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_LINK_ta.csv'))
 
 # Concatenate all scaled dataframes
-X_combined = np.concatenate([X_btc, X_eth, X_sol])
-y_combined = pd.concat([y_btc, y_eth, y_sol])
+X_combined = np.concatenate([X_btc, X_eth, X_sol, X_xrp, X_bnb, X_dot, X_ada, X_avax, X_matic, X_etc, X_link])
+y_combined = pd.concat([y_btc, y_eth, y_sol, y_xrp, y_bnb, y_dot, y_ada, y_avax, y_matic, y_etc, y_link])
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_combined, y_combined, test_size=0.01, random_state=42)
@@ -52,8 +60,12 @@ optimizer = tf.keras.optimizers.Adam(learning_rate=0.0015)  # Increase the learn
 # Compile the model
 model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
-# Train the model
-model.fit(X_train, y_train, epochs=200, batch_size=1, validation_split=0.1)
+# Early stopping callback
+early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+
+# Train the model with early stopping
+model.fit(X_train, y_train, epochs=200, batch_size=1, validation_split=0.1, callbacks=[early_stopping])
+
 
 # Evaluate the model on the test set
 loss, accuracy = model.evaluate(X_test, y_test)

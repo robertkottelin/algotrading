@@ -23,23 +23,25 @@ def compute_macd(data, span1, span2, signal_span):
     signal = macd.ewm(span=signal_span, adjust=False).mean()
     return macd, signal
 
-# Load the CSV file
-def process_file(file_path, output_file_path):
-    df = pd.read_csv(file_path)
+# Function to process each file
+def process_file(input_file_path, output_file_path):
+    df = pd.read_csv(input_file_path)
 
     # Assuming 'c' is the 'Close' price for RSI and MACD calculation
-    df['RSI'] = compute_rsi(df['c'], 25) # Optimized, Lower threshold 17, higher 76
-    df['MACD'], df['MACD_Signal'] = compute_macd(df['c'], 15, 23, 6) # Optimized
+    df['RSI'] = compute_rsi(df['c'], 25)  # Optimized, Lower threshold 17, higher 76
+    df['MACD'], df['MACD_Signal'] = compute_macd(df['c'], 15, 23, 6)  # Optimized
     
     # Drop rows with NaN values
-    df = df.dropna()
+    df.dropna(inplace=True)
 
     # Save the updated DataFrame to a new CSV file
     df.to_csv(output_file_path, index=False)
 
-# File paths
-input_file_path = 'Crypto/data/coinglass_SOL.csv'  # Replace with your input file path
-output_file_path = 'Crypto/data/coinglass_SOL_ta.csv' # Replace with your desired output file path
+# List of symbols to process
+symbols = ['SOL', 'BTC', 'ETH', 'XRP', 'BNB', 'ADA', 'AVAX', 'DOT', 'ETC', 'MATIC', 'LINK']  # Add or remove symbols as needed
 
-# Process the file
-process_file(input_file_path, output_file_path)
+# Loop through the symbols and process each file
+for symbol in symbols:
+    input_file_path = f'Crypto/data/coinglass_{symbol}.csv'
+    output_file_path = f'Crypto/data/coinglass_{symbol}_ta.csv'
+    process_file(input_file_path, output_file_path)
