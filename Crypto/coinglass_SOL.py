@@ -157,7 +157,13 @@ merged_df = pd.merge_asof(merged_df, pi_data, on='t', direction='nearest')
 merged_df = pd.merge_asof(merged_df, golden_ratio_data, on='t', direction='nearest')
 merged_df = pd.merge_asof(merged_df, stock_flow_data, on='t', direction='nearest')
 
-# save dataframe
-merged_df.to_csv('Crypto/data/coinglass_SOL.csv', index=False)
+# Load the existing data
+existing_df = pd.read_csv('Crypto/data/coinglass_SOL.csv')
+
+new_rows = merged_df[~merged_df['t'].isin(existing_df['t'])]
+
+# Append new rows to the CSV file, if there are any
+if not new_rows.empty:
+    new_rows.to_csv('Crypto/data/coinglass_SOL.csv', mode='a', header=False, index=False)
 
 print(merged_df.head())
