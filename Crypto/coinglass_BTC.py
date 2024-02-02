@@ -11,7 +11,9 @@ coinglass_api_key = os.getenv("COINGLASS_API_KEY")
 # Define headers
 headers = {
     "accept": "application/json",
-    "coinglassSecret": coinglass_api_key
+    "coinglassSecret": coinglass_api_key,
+    "CG-API-KEY": coinglass_api_key
+
 }
 
 urlOHLC = "https://open-api.coinglass.com/public/v2/indicator/price_ohlc?ex=Binance&pair=BTCUSDT&interval=h4&limit=4500"
@@ -23,6 +25,8 @@ urlPuell = "https://open-api.coinglass.com/public/v2/index/puell_multiple"
 urlPi = "https://open-api.coinglass.com/public/v2/index/pi"
 urlGoldenRatio = "https://open-api.coinglass.com/public/v2/index/golden_ratio_multiplier"
 urlStockFlow = "https://open-api.coinglass.com/public/v2/index/stock_flow"
+urlBubbleIndex = "https://open-api-v3.coinglass.com/api/index/bitcoin-bubble-index"
+
 
 ohlc = requests.get(urlOHLC, headers=headers)
 ohlc_data = ohlc.json()['data']
@@ -148,6 +152,25 @@ stock_flow_data['t'] = pd.to_datetime(stock_flow_data['t'])
 # Display the first few rows
 print("STOCK FLOW:", stock_flow_data.head())
 
+bubble = requests.get(urlBubbleIndex, headers=headers)
+# print(bubble.json())
+bubble_data = bubble.json()['data']
+# print(funding_data)
+# Convert to DataFrame
+bubble_data = pd.DataFrame(bubble_data, columns=['price', 'index', 'googleTrend', 'difficulty', 'transcations', 'sentByAddress', 'tweets', 'date'])
+# drop nan rows
+bubble_data = bubble_data.dropna()
+bubble_data = bubble_data.reset_index(drop=True)
+# Convert createTime from Unix time (seconds) to datetime
+bubble_data['date'] = pd.to_datetime(bubble_data['date']).dt.date
+# drop price
+# bubble_data = bubble_data.drop(columns=['price'])
+# rename createTime to t
+bubble_data = bubble_data.rename(columns={'date': 't'})
+bubble_data['t'] = pd.to_datetime(bubble_data['t'])
+# Display the first few rows
+print("BUBBLE:", bubble_data.head())
+
 # merge all dataframes
 merged_df = pd.merge_asof(ohlc_data, oi_data, on='t', direction='nearest')
 merged_df = pd.merge_asof(merged_df, funding_data, on='t', direction='nearest')
@@ -156,6 +179,7 @@ merged_df = pd.merge_asof(merged_df, puell_data, on='t', direction='nearest')
 merged_df = pd.merge_asof(merged_df, pi_data, on='t', direction='nearest')
 merged_df = pd.merge_asof(merged_df, golden_ratio_data, on='t', direction='nearest')
 merged_df = pd.merge_asof(merged_df, stock_flow_data, on='t', direction='nearest')
+merged_df = pd.merge_asof(merged_df, bubble_data, on='t', direction='nearest')
 
 # Load the existing data
 existing_df = pd.read_csv('Crypto/data/coinglass_BTC.csv')

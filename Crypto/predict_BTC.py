@@ -226,7 +226,7 @@ def preprocess_data_for_prediction(df, scaler):
     return X_scaled
 
 # Load the saved model
-model = tf.keras.models.load_model('Crypto/models/crypto_h4_model')
+model = tf.keras.models.load_model('Crypto/models/crypto_h4_model2')
 
 # Preprocess the new data
 scaler = StandardScaler()  # Initialize a new scaler
@@ -241,6 +241,8 @@ predicted_direction = (predictions > 0.5).astype(int)  # Convert probabilities t
 df['predicted_direction'] = predicted_direction.flatten()
 
 # Display the DataFrame with predictions
+# sort newest to oldest
+df = df.sort_values(by='t', ascending=False)
 print(df.head())
 
 # Optionally, save the DataFrame with predictions
