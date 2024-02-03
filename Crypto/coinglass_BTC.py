@@ -16,40 +16,73 @@ headers = {
 
 }
 
-urlOHLC = "https://open-api.coinglass.com/public/v2/indicator/price_ohlc?ex=Binance&pair=BTCUSDT&interval=h4&limit=4500"
-urlOI = "https://open-api.coinglass.com/public/v2/indicator/open_interest_ohlc?ex=Binance&pair=BTCUSDT&interval=h4&limit=4500"
-urlFunding = "https://open-api.coinglass.com/public/v2/indicator/funding_avg?symbol=BTC&interval=h4&limit=4500"
-urlLiquidation = "https://open-api.coinglass.com/public/v2/indicator/liquidation_pair?ex=Binance&pair=BTCUSDT&interval=h4&limit=4500"
-urlLongShort = "https://open-api.coinglass.com/public/v2/indicator/top_long_short_position_ratio?ex=Binance&pair=BTCUSDT&interval=h4&limit=4500"
-urlPuell = "https://open-api.coinglass.com/public/v2/index/puell_multiple"
-urlPi = "https://open-api.coinglass.com/public/v2/index/pi"
-urlGoldenRatio = "https://open-api.coinglass.com/public/v2/index/golden_ratio_multiplier"
-urlStockFlow = "https://open-api.coinglass.com/public/v2/index/stock_flow"
+urlSupportedCoins = "https://open-api-v3.coinglass.com/api/futures/openInterest/ohlc-history?exchange=Binance&symbol=BTCUSDT&interval=4h&limit=4500"
+urlSupportedExchanges = "https://open-api-v3.coinglass.com/api/futures/supported-exchange-pairs"
+
+# Open Interest
+urlOIOHLC = "https://open-api-v3.coinglass.com/api/futures/openInterest/ohlc-history?exchange=Binance&symbol=BTCUSDT&interval=4h&limit=4500"
+urlOIHistory = "https://open-api-v3.coinglass.com/api/futures/openInterest/ohlc-aggregated-history?symbol=BTC&interval=4h&limit=4500"
+urlExchangeListOIBTC = "https://open-api-v3.coinglass.com/api/futures/openInterest/exchange-list?symbol=BTC"
+
+# Funding
+urlFunding = "https://open-api-v3.coinglass.com/api/futures/fundingRate/ohlc-history?exchange=Binance&symbol=BTCUSDT&interval=4h&limit=4500"
+urlFundingHistoryOIWeight = "https://open-api-v3.coinglass.com/api/futures/fundingRate/oi-weight-ohlc-history?exchange=Binance&symbol=BTCUSDT&interval=4h&limit=4500"
+urlFundingHistoryVolWeight = "https://open-api-v3.coinglass.com/api/futures/fundingRate/vol-weight-ohlc-history?exchange=Binance&symbol=BTCUSDT&interval=4h&limit=4500"
+
+# Liquidation
+urlLiquidation = "https://open-api-v3.coinglass.com/api/futures/liquidation/history?exchange=Binance&symbol=BTCUSDT&interval=4h&limit=4500"
+urlLiquidationHistory = "https://open-api-v3.coinglass.com/api/futures/liquidation/aggregated-history"
+urlLiquidationCoinList = "https://open-api-v3.coinglass.com/api/futures/liquidation/coin-list?symbol=BTC&range=4h"
+urlLiquidationExchangeList = "https://open-api-v3.coinglass.com/api/futures/liquidation/exchange-list?symbol=BTC&range=4h"
+
+# Long/Short
+urlGlobalLongShort = "https://open-api-v3.coinglass.com/api/futures/globalLongShortAccountRatio/history?exchange=Binance&symbol=BTCUSDT&interval=4h&limit=4500"
+urlAccountLongShort = "https://open-api-v3.coinglass.com/api/futures/topLongShortAccountRatio/history?exchange=Binance&symbol=BTCUSDT&interval=4h&limit=4500"
+urltopLongShortPositionRatio = "https://open-api-v3.coinglass.com/api/futures/topLongShortPositionRatio/history?exchange=Binance&symbol=BTCUSDT&interval=4h&limit=4500"
+urlaggregatedTakerBuySellVolumeRatio = "https://open-api-v3.coinglass.com/api/futures/aggregatedTakerBuySellVolumeRatio/history?exchange=Binance&symbol=BTCUSDT&interval=4h&limit=4500"
+urltakerBuySellVolume = "https://open-api-v3.coinglass.com/api/futures/takerBuySellVolume/history?exchange=Binance&symbol=BTCUSDT&interval=4h&limit=4500"
+urltakerBuySellVolume = "https://open-api-v3.coinglass.com/api/futures/takerBuySellVolume/exchange-list?exchange=Binance&symbol=BTCUSDT&interval=4h&limit=4500"
+
+
+# Indicator
 urlBubbleIndex = "https://open-api-v3.coinglass.com/api/index/bitcoin-bubble-index"
+urlahr999 = "https://open-api-v3.coinglass.com/api/index/ahr999"
+urlPuell = "https://open-api-v3.coinglass.com/api/index/puell-multiple"
+urlStockFlow = "https://open-api-v3.coinglass.com/api/index/stock-flow"
+urlPi = "https://open-api-v3.coinglass.com/api/index/pi"
+urlGoldenRatio = "https://open-api-v3.coinglass.com/api/index/golden-ratio-multiplier"
+urlBTCProfitable = "https://open-api-v3.coinglass.com/api/index/bitcoin-profitable-days"
+urlRainbow = "https://open-api-v3.coinglass.com/api/index/bitcoin-rainbow-chart"
+urlFearGreed = "https://open-api-v3.coinglass.com/api/index/fear-greed-history"
+
+# Option
+urlOption = "https://open-api-v3.coinglass.com/api/option/info?symbol=BTC"
 
 
-ohlc = requests.get(urlOHLC, headers=headers)
+ohlc = requests.get(urlOIOHLC, headers=headers)
 ohlc_data = ohlc.json()['data']
 # Convert to DataFrame
-ohlc_data = pd.DataFrame(ohlc_data, columns=['t', 'o', 'h', 'l', 'c', 'v'])
+ohlc_data = pd.DataFrame(ohlc_data, columns=['t', 'o', 'h', 'l', 'c'])
 # Convert createTime from Unix time (seconds) to datetime
 ohlc_data['t'] = pd.to_datetime(ohlc_data['t'], unit='s')
+# Fill NaN values with previous values
+ohlc_data = ohlc_data.fillna(method='ffill')
 # drop o, h, l
 # ohlc_data = ohlc_data.drop(columns=['o', 'h', 'l'])
 # Display the first few rows
 print("PRICE:", ohlc_data.head())
 
 # Make requests, saved as json
-oi = requests.get(urlOI, headers=headers)
+oi = requests.get(urlOIHistory, headers=headers)
 oi_data = oi.json()['data']
 # print(oi_data)
 # Convert to DataFrame
-oi_data = pd.DataFrame(oi_data, columns=['t', 'o', 'c', 'h', 'l'])
+oi_data = pd.DataFrame(oi_data, columns=['t', 'o', 'h', 'l', 'c'])
 # Convert createTime from Unix time (seconds) to datetime
 oi_data['t'] = pd.to_datetime(oi_data['t'], unit='ms')
 # drop column o, h, l
-oi_data = oi_data.drop(columns=['o', 'h', 'l'])
-oi_data = oi_data.rename(columns={'c': 'c_oi'})
+# oi_data = oi_data.drop(columns=['o', 'h', 'l'])
+# oi_data = oi_data.rename(columns={'c': 'c_oi'})
 # Display the first few rows
 print("OI:", oi_data.head())
 
@@ -57,7 +90,7 @@ funding = requests.get(urlFunding, headers=headers)
 funding_data = funding.json()['data']
 # print(funding_data)
 # Convert to DataFrame
-funding_data = pd.DataFrame(funding_data, columns=['fundingRate', 'createTime'])
+funding_data = pd.DataFrame(funding_data, columns=['t', 'o', 'h', 'l', 'c'])
 # Convert createTime from Unix time (seconds) to datetime
 funding_data['createTime'] = pd.to_datetime(funding_data['createTime'], unit='ms')
 # rename createTime to t
