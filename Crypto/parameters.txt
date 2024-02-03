@@ -1,3 +1,2 @@
-Column: MACD_Signal
-P-Values: [0.4751, 0.7825, 0.7991, 0.9211, 0.3581]
-Min P-Value: 0.3581
+Final Best Parameters: (8, 14, 75, 23, 22, 25)
+Final Best Profit: 1.3528829552445183

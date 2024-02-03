@@ -40,5 +40,11 @@ for exchange, instruments in exchanges_data.items():
     # Append to the main DataFrame
     df = pd.concat([df, temp_df], ignore_index=True)
 
+# remove base asset and quote asset
+df = df.drop(['baseAsset', 'quoteAsset'], axis=1)
+
+# drop everything except wors containing 'AAVE' , 'ADA', 'AVAX', 'BNB', 'BTC', 'DOT', 'ETH', 'ETC',  'LINK', 'LTC', 'MATIC', 'SOL', 'XRP'
+df = df[df['instrumentId'].str.contains('AAVE|ADA|AVAX|BNB|BTC|DOT|ETH|ETC|LINK|LTC|MATIC|SOL|XRP')]
+
 # Save the DataFrame to a CSV file
 df.to_csv('Crypto/data/exchanges.csv', index=False)

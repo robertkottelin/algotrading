@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os
 
 # Function to calculate RSI
 def compute_rsi(data, window):
@@ -27,9 +28,9 @@ def compute_macd(data, span1, span2, signal_span):
 def process_file(input_file_path, output_file_path):
     df = pd.read_csv(input_file_path)
 
-    # Assuming 'c' is the 'Close' price for RSI and MACD calculation
-    df['RSI'] = compute_rsi(df['c'], 25)  # Optimized, Lower threshold 17, higher 76
-    df['MACD'], df['MACD_Signal'] = compute_macd(df['c'], 15, 23, 6)  # Optimized
+    # Assuming 'BTC price' is the column name for the 'Close' price for RSI and MACD calculation
+    df['RSI'] = compute_rsi(df['BTC price'], 14)
+    df['MACD'], df['MACD_Signal'] = compute_macd(df['BTC price'], 12, 26, 9)
     
     # Drop rows with NaN values
     df.dropna(inplace=True)
@@ -37,11 +38,17 @@ def process_file(input_file_path, output_file_path):
     # Save the updated DataFrame to a new CSV file
     df.to_csv(output_file_path, index=False)
 
-# List of symbols to process
-symbols = ['AAVE' , 'ADA', 'AVAX', 'BNB', 'BTC', 'DOT', 'ETH', 'ETC',  'LINK', 'LTC', 'MATIC', 'SOL', 'XRP']  # Add or remove symbols as needed
+def process_all_files():
+    input_dir = 'Crypto/data'
+    output_dir = 'Crypto/ta_data'
+    
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    
+    for file_name in os.listdir(input_dir):
+        input_file_path = os.path.join(input_dir, file_name)
+        output_file_path = os.path.join(output_dir, file_name)
+        process_file(input_file_path, output_file_path)
+        print(f'Processed and saved: {output_file_path}')
 
-# Loop through the symbols and process each file
-for symbol in symbols:
-    input_file_path = f'Crypto/data/coinglass_{symbol}.csv'
-    output_file_path = f'Crypto/data/coinglass_{symbol}_ta.csv'
-    process_file(input_file_path, output_file_path)
+process_all_files()
