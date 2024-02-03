@@ -81,7 +81,7 @@ def optimize_parameters(file_path):
                 best_parameters = params
                 print(f"New Best Profit: {best_profit} with Parameters: {best_parameters}")
                 # Write parameters to file
-                with open('Crypto/parameters.txt', 'w') as f:
+                with open('Crypto/data/parameters.txt', 'w') as f:
                     f.write(f"Final Best Parameters: {best_parameters}\n")
                     f.write(f"Final Best Profit: {best_profit}\n")
             if processed_iterations % 1000 == 0:
@@ -100,6 +100,6 @@ print(f"Final Best Parameters: {best_parameters}")
 print(f"Final Best Profit: {best_profit}")
 
 # Write parameters to file
-with open('Crypto/parameters.txt', 'w') as f:
+with open('Crypto/data/parameters.txt', 'w') as f:
     f.write(f"Final Best Parameters: {best_parameters}\n")
     f.write(f"Final Best Profit: {best_profit}\n")
