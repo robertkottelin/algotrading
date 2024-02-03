@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import itertools
-from multiprocessing import Pool, cpu_count
+from multiprocessing import Pool, cpu_count, freeze_support
 
 # Function to calculate RSI
 def compute_rsi(data, window=14):
@@ -89,17 +89,15 @@ def optimize_parameters(file_path):
 
     return best_parameters, best_profit
 
-# File path
-input_file_path = 'Crypto/data/coinglass_BTC.csv' 
+if __name__ == '__main__':
+    # This block ensures the multiprocessing code only runs when the script is executed directly
+    freeze_support()  # Only necessary if you plan to "freeze" your script into an executable
+    input_file_path = 'Crypto/data/coinglass_BTC.csv'
+    best_parameters, best_profit = optimize_parameters(input_file_path)
+    print(f"Final Best Parameters: {best_parameters}")
+    print(f"Final Best Profit: {best_profit}")
 
-# Optimize parameters
-best_parameters, best_profit = optimize_parameters(input_file_path)
-
-# Print final best parameters and profit
-print(f"Final Best Parameters: {best_parameters}")
-print(f"Final Best Profit: {best_profit}")
-
-# Write parameters to file
-with open('Crypto/data/parameters.txt', 'w') as f:
-    f.write(f"Final Best Parameters: {best_parameters}\n")
-    f.write(f"Final Best Profit: {best_profit}\n")
+    # Write parameters to file
+    with open('Crypto/data/parameters.txt', 'w') as f:
+        f.write(f"Final Best Parameters: {best_parameters}\n")
+        f.write(f"Final Best Profit: {best_profit}\n")
