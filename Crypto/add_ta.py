@@ -38,7 +38,7 @@ def process_file(input_file_path, output_file_path):
     df.to_csv(output_file_path, index=False)
 
 # List of symbols to process
-symbols = ['SOL', 'BTC', 'ETH', 'XRP', 'BNB', 'ADA', 'AVAX', 'DOT', 'ETC', 'MATIC', 'LINK']  # Add or remove symbols as needed
+symbols = ['AAVE' , 'ADA', 'AVAX', 'BNB', 'BTC', 'DOT', 'ETH', 'ETC',  'LINK', 'LTC', 'MATIC', 'SOL', 'XRP']  # Add or remove symbols as needed
 
 # Loop through the symbols and process each file
 for symbol in symbols:

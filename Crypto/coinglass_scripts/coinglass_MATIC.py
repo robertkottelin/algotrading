@@ -17,32 +17,32 @@ headers = {
 }
 
 # Info
-urlSupportedCoins = "https://open-api-v3.coinglass.com/api/futures/openInterest/ohlc-history?exchange=Binance&symbol=BTCUSDT&interval=1d&limit=4500"
+urlSupportedCoins = "https://open-api-v3.coinglass.com/api/futures/openInterest/ohlc-history?exchange=Binance&symbol=MATICUSDT&interval=1d&limit=4500"
 urlSupportedExchanges = "https://open-api-v3.coinglass.com/api/futures/supported-exchange-pairs"
 
 # Open Interest
-urlOIOHLC = "https://open-api-v3.coinglass.com/api/futures/openInterest/ohlc-history?exchange=Binance&symbol=BTCUSDT&interval=1d&limit=4500"
-urlOIHistory = "https://open-api-v3.coinglass.com/api/futures/openInterest/ohlc-aggregated-history?symbol=BTC&interval=1d&limit=4500&startTime=1652342400"
-# urlExchangeListOIBTC = "https://open-api-v3.coinglass.com/api/futures/openInterest/exchange-list?symbol=BTC" no time column
+urlOIOHLC = "https://open-api-v3.coinglass.com/api/futures/openInterest/ohlc-history?exchange=Binance&symbol=MATICUSDT&interval=1d&limit=4500"
+urlOIHistory = "https://open-api-v3.coinglass.com/api/futures/openInterest/ohlc-aggregated-history?symbol=MATIC&interval=1d&limit=4500&startTime=1652342400"
+# urlExchangeListOIMATIC = "https://open-api-v3.coinglass.com/api/futures/openInterest/exchange-list?symbol=MATIC" no time column
 
 # Funding
-urlFunding = "https://open-api-v3.coinglass.com/api/futures/fundingRate/ohlc-history?exchange=Binance&symbol=BTCUSDT&interval=1d&limit=4500"
-urlFundingHistoryOIWeight = "https://open-api-v3.coinglass.com/api/futures/fundingRate/oi-weight-ohlc-history?symbol=BTC&interval=1d&limit=4500"
-urlFundingHistoryVolWeight = "https://open-api-v3.coinglass.com/api/futures/fundingRate/vol-weight-ohlc-history?symbol=BTC&interval=1d&limit=4500"
+urlFunding = "https://open-api-v3.coinglass.com/api/futures/fundingRate/ohlc-history?exchange=Binance&symbol=MATICUSDT&interval=1d&limit=4500"
+urlFundingHistoryOIWeight = "https://open-api-v3.coinglass.com/api/futures/fundingRate/oi-weight-ohlc-history?symbol=MATIC&interval=1d&limit=4500"
+urlFundingHistoryVolWeight = "https://open-api-v3.coinglass.com/api/futures/fundingRate/vol-weight-ohlc-history?symbol=MATIC&interval=1d&limit=4500"
 
 # Liquidation
-urlLiquidation = "https://open-api-v3.coinglass.com/api/futures/liquidation/history?exchange=Binance&symbol=BTCUSDT&interval=1d&limit=4500"
-urlLiquidationHistory = "https://open-api-v3.coinglass.com/api/futures/liquidation/aggregated-history?symbol=BTC&interval=1d&limit=4500"
-# urlLiquidationCoinList = "https://open-api-v3.coinglass.com/api/futures/liquidation/coin-list?symbol=BTC&range=1d"
-# urlLiquidationExchangeList = "https://open-api-v3.coinglass.com/api/futures/liquidation/exchange-list?symbol=BTC&range=1d"
+urlLiquidation = "https://open-api-v3.coinglass.com/api/futures/liquidation/history?exchange=Binance&symbol=MATICUSDT&interval=1d&limit=4500"
+urlLiquidationHistory = "https://open-api-v3.coinglass.com/api/futures/liquidation/aggregated-history?symbol=MATIC&interval=1d&limit=4500"
+# urlLiquidationCoinList = "https://open-api-v3.coinglass.com/api/futures/liquidation/coin-list?symbol=MATIC&range=1d"
+# urlLiquidationExchangeList = "https://open-api-v3.coinglass.com/api/futures/liquidation/exchange-list?symbol=MATIC&range=1d"
 
 # Long/Short
-urlGlobalLongShort = "https://open-api-v3.coinglass.com/api/futures/globalLongShortAccountRatio/history?exchange=Binance&symbol=BTCUSDT&interval=1d&limit=4500"
-urlAccountLongShort = "https://open-api-v3.coinglass.com/api/futures/topLongShortAccountRatio/history?exchange=Binance&symbol=BTCUSDT&interval=1d&limit=4500"
-urltopLongShortPositionRatio = "https://open-api-v3.coinglass.com/api/futures/topLongShortPositionRatio/history?exchange=Binance&symbol=BTCUSDT&interval=1d&limit=4500"
-urlaggregatedTakerBuySellVolumeRatio = "https://open-api-v3.coinglass.com/api/futures/aggregatedTakerBuySellVolumeRatio/history?exchange=Binance&symbol=BTCUSDT&interval=1d&limit=4500"
-urltakerBuySellVolume = "https://open-api-v3.coinglass.com/api/futures/takerBuySellVolume/history?exchange=Binance&symbol=BTCUSDT&interval=1d&limit=4500"
-# urltakerBuySellVolume = "https://open-api-v3.coinglass.com/api/futures/takerBuySellVolume/exchange-list?exchange=Binance&symbol=BTCUSDT&interval=1d&limit=4500"
+urlGlobalLongShort = "https://open-api-v3.coinglass.com/api/futures/globalLongShortAccountRatio/history?exchange=Binance&symbol=MATICUSDT&interval=1d&limit=4500"
+urlAccountLongShort = "https://open-api-v3.coinglass.com/api/futures/topLongShortAccountRatio/history?exchange=Binance&symbol=MATICUSDT&interval=1d&limit=4500"
+urltopLongShortPositionRatio = "https://open-api-v3.coinglass.com/api/futures/topLongShortPositionRatio/history?exchange=Binance&symbol=MATICUSDT&interval=1d&limit=4500"
+urlaggregatedTakerBuySellVolumeRatio = "https://open-api-v3.coinglass.com/api/futures/aggregatedTakerBuySellVolumeRatio/history?exchange=Binance&symbol=MATICUSDT&interval=1d&limit=4500"
+urltakerBuySellVolume = "https://open-api-v3.coinglass.com/api/futures/takerBuySellVolume/history?exchange=Binance&symbol=MATICUSDT&interval=1d&limit=4500"
+# urltakerBuySellVolume = "https://open-api-v3.coinglass.com/api/futures/takerBuySellVolume/exchange-list?exchange=Binance&symbol=MATICUSDT&interval=1d&limit=4500"
 
 # Indicator
 urlBubbleIndex = "https://open-api-v3.coinglass.com/api/index/bitcoin-bubble-index"
@@ -51,13 +51,13 @@ urlPuell = "https://open-api-v3.coinglass.com/api/index/puell-multiple"
 urlStockFlow = "https://open-api-v3.coinglass.com/api/index/stock-flow"
 urlPi = "https://open-api-v3.coinglass.com/api/index/pi"
 urlGoldenRatio = "https://open-api-v3.coinglass.com/api/index/golden-ratio-multiplier"
-urlBTCProfitable = "https://open-api-v3.coinglass.com/api/index/bitcoin-profitable-days"
+urlMATICProfitable = "https://open-api-v3.coinglass.com/api/index/bitcoin-profitable-days"
 urlRainbow = "https://open-api-v3.coinglass.com/api/index/bitcoin-rainbow-chart"
 urlFearGreed = "https://open-api-v3.coinglass.com/api/index/fear-greed-history"
 
 
 # Option
-urlOption = "https://open-api-v3.coinglass.com/api/option/info?symbol=BTC"
+urlOption = "https://open-api-v3.coinglass.com/api/option/info?symbol=MATIC"
 
 
 oi_ohlc = requests.get(urlOIOHLC, headers=headers)
@@ -371,100 +371,8 @@ df_merged.dropna(inplace=True)
 
 print(df_merged.head())
 
-# If Crypto/data/coinglass_BTC.csv not found, create new df, otherwise append
-if not os.path.exists('Crypto/data/coinglass_BTC_predict.csv'):
-    df_merged.to_csv('Crypto/data/coinglass_BTC_predict.csv', index=False)
+# If Crypto/data/coinglass_MATIC.csv not found, create new df, otherwise append
+if not os.path.exists('Crypto/data/coinglass_MATIC.csv'):
+    df_merged.to_csv('Crypto/data/coinglass_MATIC.csv', index=False)
 else:
-    df_merged.to_csv('Crypto/data/coinglass_BTC_predict.csv', mode='a', header=False, index=False)
-
-# save dataframe
-df_merged.to_csv('Crypto/data/coinglass_BTC_predict.csv', index=False)
-
-# print(merged_df.head())
-
-import pandas as pd
-import numpy as np
-
-# Function to calculate RSI
-def compute_rsi(data, window):
-    delta = data.diff()
-    up, down = delta.copy(), delta.copy()
-    up[up < 0] = 0
-    down[down > 0] = 0
-
-    roll_up = up.rolling(window).mean()
-    roll_down = down.abs().rolling(window).mean()
-
-    rs = roll_up / roll_down
-    rsi = 100.0 - (100.0 / (1.0 + rs))
-    return rsi
-
-# Function to calculate MACD
-def compute_macd(data, span1, span2, signal_span):
-    ema1 = data.ewm(span=span1, adjust=False).mean()
-    ema2 = data.ewm(span=span2, adjust=False).mean()
-    macd = ema1 - ema2
-    signal = macd.ewm(span=signal_span, adjust=False).mean()
-    return macd, signal
-
-# Load the CSV file
-def process_file(file_path, output_file_path):
-    df = pd.read_csv(file_path)
-
-    # Assuming 'c' is the 'Close' price for RSI and MACD calculation
-    df['RSI'] = compute_rsi(df['BTC price'], 25) # Optimized, Lower threshold 17, higher 76
-    df['MACD'], df['MACD_Signal'] = compute_macd(df['BTC price'], 15, 23, 6) # Optimized
-    
-    # Drop rows with NaN values
-    df = df.dropna()
-
-    # Save the updated DataFrame to a new CSV file
-    df.to_csv(output_file_path, index=False)
-
-# File paths
-input_file_path = 'Crypto/data/coinglass_BTC_predict.csv'  # Replace with your input file path
-output_file_path = 'Crypto/data/coinglass_BTC_ta_predict.csv' # Replace with your desired output file path
-
-# Process the file
-process_file(input_file_path, output_file_path)  # Use the file path here
-
-# Load the processed data
-df = pd.read_csv(output_file_path)
-
-# Sort the DataFrame by date, descending
-# df = df.sort_values(by='t', ascending=False)
-
-import tensorflow as tf
-from sklearn.preprocessing import StandardScaler
-
-# Function to preprocess and scale the data
-def preprocess_data_for_prediction(df, scaler):
-    # Assuming the same preprocessing as during training
-    X = df.drop(columns=['t'])  # Drop columns that are not features
-    X_scaled = scaler.transform(X)  # Scale the features
-    return X_scaled
-
-# Load the saved model
-model = tf.keras.models.load_model('Crypto/models/crypto_1d_model')
-
-# Preprocess the new data
-scaler = StandardScaler()  # Initialize a new scaler
-scaler.fit(df.drop(columns=['t']))  # Fit the scaler to the new data
-X_new = preprocess_data_for_prediction(df, scaler)
-
-# Predict the future price direction
-predictions = model.predict(X_new)
-predicted_direction = (predictions > 0.5).astype(int)  # Convert probabilities to binary predictions
-
-# Add predictions to the DataFrame
-df['predicted_direction'] = predicted_direction.flatten()
-
-# Display the DataFrame with predictions
-# sort newest to oldest
-df = df.sort_values(by='t', ascending=False)
-# drop all columns except for t, BTC price and predicted_direction
-df = df[['t', 'BTC price', 'predicted_direction']]
-print(df.head())
-
-# Optionally, save the DataFrame with predictions
-df.to_csv('Crypto/data/coinglass_BTC_with_predictions.csv', index=False)
+    df_merged.to_csv('Crypto/data/coinglass_MATIC.csv', mode='a', header=False, index=False)

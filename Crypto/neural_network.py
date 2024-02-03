@@ -7,18 +7,18 @@ import os
 
 def preprocess_and_scale(df):
     # Shift the 'c' column to predict the future price direction
-    shift_rows = 12
-    df['c_future'] = df['c'].shift(-shift_rows)
+    shift_rows = 1
+    df['price_future'] = df['BTC price'].shift(-shift_rows)
 
     # Create a binary target variable for price direction
-    df['c_future_direction'] = (df['c_future'] > df['c']).astype(int)
+    df['price_future_direction'] = (df['price_future'] > df['BTC price']).astype(int)
 
     # Drop the last 'shift_rows' rows where the future price is NaN
     df = df.dropna()
 
     # Define features (X) and target (y)
-    X = df.drop(columns=['c_future', 'c_future_direction', 't'])  # Assuming 't' is a timestamp column
-    y = df['c_future_direction']
+    X = df.drop(columns=['price_future', 'price_future_direction', 't'])  # Assuming 't' is a timestamp column
+    y = df['price_future_direction']
 
     # Scale the features
     scaler = StandardScaler()
@@ -27,29 +27,32 @@ def preprocess_and_scale(df):
     return X_scaled, y
 
 # Load and preprocess the data
-X_btc, y_btc = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_BTC_ta.csv'))
-X_eth, y_eth = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_ETH_ta.csv'))
-X_sol, y_sol = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_SOL_ta.csv'))
-X_xrp, y_xrp = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_XRP_ta.csv'))
-X_bnb, y_bnb = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_BNB_ta.csv'))
-X_dot, y_dot = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_DOT_ta.csv'))
+X_aave, y_aave = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_AAVE_ta.csv'))
 X_ada, y_ada = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_ADA_ta.csv'))
 X_avax, y_avax = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_AVAX_ta.csv'))
-X_matic, y_matic = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_MATIC_ta.csv'))
+X_bnb, y_bnb = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_BNB_ta.csv'))
+X_btc, y_btc = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_BTC_ta.csv'))
+X_dot, y_dot = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_DOT_ta.csv'))
 X_etc, y_etc = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_ETC_ta.csv'))
+X_eth, y_eth = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_ETH_ta.csv'))
 X_link, y_link = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_LINK_ta.csv'))
+X_ltc, y_ltc = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_LTC_ta.csv'))
+X_matic, y_matic = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_MATIC_ta.csv'))
+X_sol, y_sol = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_SOL_ta.csv'))
+X_xrp, y_xrp = preprocess_and_scale(pd.read_csv('Crypto/data/coinglass_XRP_ta.csv'))
 
 # Concatenate all scaled dataframes
-X_combined = np.concatenate([X_btc, X_eth, X_sol, X_xrp, X_bnb, X_dot, X_ada, X_avax, X_matic, X_etc, X_link])
-y_combined = pd.concat([y_btc, y_eth, y_sol, y_xrp, y_bnb, y_dot, y_ada, y_avax, y_matic, y_etc, y_link])
+X_combined = np.concatenate([X_aave, X_ada, X_avax, X_bnb, X_btc, X_dot, X_etc, X_eth, X_link, X_ltc, X_matic, X_sol, X_xrp ])
+y_combined = pd.concat([y_aave, y_ada, y_avax, y_bnb, y_btc, y_dot, y_etc, y_eth, y_link, y_ltc, y_matic, y_sol, y_xrp])
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_combined, y_combined, test_size=0.01, random_state=42)
 
 # Define the neural network model
 model = tf.keras.models.Sequential([
-    tf.keras.layers.Dense(128, activation='relu', input_shape=(X_train.shape[1],)),
+    tf.keras.layers.Dense(256, activation='relu', input_shape=(X_train.shape[1],)),
     tf.keras.layers.Dropout(0.1),  # Dropout layer for regularization
+    tf.keras.layers.Dense(128, activation='relu'),
     tf.keras.layers.Dense(64, activation='relu'),
     tf.keras.layers.Dense(32, activation='relu'),
     tf.keras.layers.Dense(1, activation='sigmoid')  # Sigmoid for binary classification
@@ -77,7 +80,7 @@ if not os.path.exists(model_dir):
     os.makedirs(model_dir)
 
 # Save the model
-model.save(f'{model_dir}/crypto_h4_model2')
+model.save(f'{model_dir}/crypto_1d_model')
 
 print("Model saved successfully!")
 

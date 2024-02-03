@@ -39,10 +39,10 @@ def simulate_trading(df):
 
     for index, row in df.iterrows():
         if row['Buy_Signal'] and not in_position:
-            buy_price = row['c']
+            buy_price = row['BTC price']
             in_position = True
         elif row['Sell_Signal'] and in_position:
-            sell_price = row['c']
+            sell_price = row['BTC price']
             profit += (sell_price - buy_price) / buy_price
             in_position = False
 
@@ -51,11 +51,11 @@ def simulate_trading(df):
 
 # Function to process a single set of parameters (slightly modified for multiprocessing)
 def process_parameters(params):
-    df = pd.read_csv('Crypto/coinglass.csv')  # Load the data in each process
+    df = pd.read_csv('Crypto/data/coinglass_BTC.csv')  # Load the data in each process
     rsi_window, lower_threshold, upper_threshold, macd_span1, macd_span2, macd_signal_span = params
 
-    df['RSI'] = compute_rsi(df['c'], rsi_window)
-    df['MACD'], df['MACD_Signal'] = compute_macd(df['c'], macd_span1, macd_span2, macd_signal_span)
+    df['RSI'] = compute_rsi(df['BTC price'], rsi_window)
+    df['MACD'], df['MACD_Signal'] = compute_macd(df['BTC price'], macd_span1, macd_span2, macd_signal_span)
     df = define_trade_signals(df, lower_threshold, upper_threshold)
     profit = simulate_trading(df)
 
@@ -64,8 +64,8 @@ def process_parameters(params):
 # Function to optimize parameters using multiprocessing
 def optimize_parameters(file_path):
     parameter_space = list(itertools.product(
-            range(8, 28, 1), range(16, 24, 1), range(76, 84, 1),
-            range(8, 16, 1), range(22, 32, 1), range(6, 18, 1)))
+            range(8, 32, 1), range(14, 30, 1), range(70, 86, 1), # RSI parameters: window, lower threshold, upper threshold
+            range(8, 24, 1), range(20, 38, 1), range(6, 26, 1))) # MACD parameters: span1, span2, signal_span
     
     total_iterations = len(parameter_space)
     processed_iterations = 0
@@ -90,7 +90,7 @@ def optimize_parameters(file_path):
     return best_parameters, best_profit
 
 # File path
-input_file_path = 'Crypto/coinglass.csv' 
+input_file_path = 'Crypto/data/coinglass_BTC.csv' 
 
 # Optimize parameters
 best_parameters, best_profit = optimize_parameters(input_file_path)
